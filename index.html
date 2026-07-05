@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LC Study Hub | Uri Naor</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body
+    class="bg-gray-50 text-gray-800 font-sans flex flex-col min-h-screen selection:bg-indigo-100 selection:text-indigo-900">
+
+    <!-- Top Navigation Bar -->
+    <div
+        class="bg-white border-b border-gray-100 px-6 py-4 flex justify-between items-center shrink-0 shadow-sm z-50 sticky top-0">
+        <h1 class="font-bold text-xl text-gray-700 flex items-center gap-2">
+            <span>📚</span>
+            <a href="index.html" class="hover:text-indigo-500 transition-colors">LC Study Hub</a>
+        </h1>
+        <div class="flex gap-5 text-sm font-semibold text-gray-500">
+            <a href="patterns.html" class="hover:text-indigo-500 transition-colors">Pattern Practice</a>
+            <a href="python4leetcode.html" class="hover:text-indigo-500 transition-colors">Python Syntax</a>
+            <a href="recognition.html" class="hover:text-indigo-500 transition-colors">Pattern Recognition</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 px-6 py-12 overflow-y-auto flex flex-col items-center">
+        <div class="max-w-4xl w-full flex flex-col gap-12">
+
+            <!-- 1. Introduction -->
+            <section class="text-center max-w-2xl mx-auto space-y-6">
+                <h2 class="text-4xl font-extrabold text-gray-800 tracking-tight">Hey, I'm Uri 👋</h2>
+                <p class="text-lg text-gray-600 leading-relaxed">
+                    I built this mini-project to solve my own problem.
+                    I realized that reading through LeetCode solutions isn't the best way to <em>remember</em>
+                    them. The tools featured are built around science-backed methods to make learning stick.
+                </p>
+                <p class="text-lg text-gray-600 leading-relaxed">
+                    I completely vibe-coded this with AI to see how far I could take it. It’s not meant to be a showcase
+                    of my development skills, but rather a practical way to solve a real problem I was facing in my
+                    own studies.
+                </p>
+                <div class="pt-4 flex justify-center gap-4">
+                    <a href="https://github.com/ConfidentNerd/" target="_blank"
+                        class="text-gray-500 hover:text-gray-900 font-semibold transition-colors">GitHub</a>
+                    <span class="text-gray-300">•</span>
+                    <a href="https://www.linkedin.com/in/uri-naor/" target="_blank"
+                        class="text-gray-500 hover:text-indigo-600 font-semibold transition-colors">LinkedIn</a>
+                </div>
+            </section>
+
+            <!-- 2. The Tools -->
+            <section class="grid md:grid-cols-3 gap-6">
+                <a href="patterns.html"
+                    class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:border-indigo-200 hover:shadow-md hover:-translate-y-1 transition-all group flex flex-col">
+                    <div class="text-4xl mb-4 group-hover:scale-110 transition-transform origin-left">🧩</div>
+                    <h3 class="font-bold text-xl text-gray-800 mb-3 group-hover:text-indigo-600 transition-colors">
+                        Pattern Practice</h3>
+                    <p class="text-gray-600 leading-relaxed flex-1 text-sm">
+                        Stop memorizing algorithms one by one. This tool uses an embedded code editor to force you to
+                        write out the skeletal templates for the 17 core patterns completely from memory.
+                    </p>
+                </a>
+
+                <a href="python4leetcode.html"
+                    class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:border-indigo-200 hover:shadow-md hover:-translate-y-1 transition-all group flex flex-col">
+                    <div class="text-4xl mb-4 group-hover:scale-110 transition-transform origin-left">🐍</div>
+                    <h3 class="font-bold text-xl text-gray-800 mb-3 group-hover:text-indigo-600 transition-colors">
+                        Python Syntax</h3>
+                    <p class="text-gray-600 leading-relaxed flex-1 text-sm">
+                        Most CS students already know how to program. You don't need a tutorial; you just need to
+                        remember how to initialize a heap. Flashcards strictly for LeetCode-specific Python syntax.
+                    </p>
+                </a>
+
+                <a href="recognition.html"
+                    class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:border-indigo-200 hover:shadow-md hover:-translate-y-1 transition-all group flex flex-col">
+                    <div class="text-4xl mb-4 group-hover:scale-110 transition-transform origin-left">⏱️</div>
+                    <h3 class="font-bold text-xl text-gray-800 mb-3 group-hover:text-indigo-600 transition-colors">
+                        Pattern Recognition</h3>
+                    <p class="text-gray-600 leading-relaxed flex-1 text-sm">
+                        Read a classic interview question and immediately diagnose the underlying pattern. It includes
+                        an optional timer (5, 10, or 15 mins) to turn it into a game and build speed.
+                    </p>
+                </a>
+            </section>
+
+            <!-- 3. Active Recall -->
+            <section class="bg-indigo-50 p-8 md:p-10 rounded-3xl border border-indigo-100">
+                <h3 class="text-2xl font-bold text-indigo-900 mb-4">Why does this work? Active Recall.</h3>
+                <p class="text-indigo-800 leading-relaxed mb-4">
+                    Under the hood, our bodies are designed to conserve energy. The neural pathways we use get stronger,
+                    and the ones we don't get deleted. Re-reading your notes or writing down answers while staring at
+                    open solutions is mostly a waste of time because you aren't forcing your brain to do the work.
+                    You're just transcribing.
+                </p>
+                <p class="text-indigo-800 leading-relaxed mb-4">
+                    To actually learn, you need <strong>Active Recall</strong>: closing the book, putting away the
+                    solutions, and retrieving the information entirely from memory. Combine that with <strong>Spaced
+                        Repetition</strong> (doing it multiple times over spaced intervals), and it fundamentally
+                    changes how you retain information.
+                </p>
+                <p class="text-indigo-800 leading-relaxed mb-4">
+                    That is exactly what this hub is designed for. Each tool forces you to pull the answer from memory
+                    and provides <span class="text-indigo-900 font-extrabold">instant feedback</span>, allowing you to
+                    correct mistakes in real-time and bridge the gap between passive reading and active learning.
+                </p>
+            </section>
+
+            <!-- 4. How I Know This -->
+            <section
+                class="flex flex-col md:flex-row gap-8 items-center bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-gray-100">
+                <div class="flex-1 space-y-4">
+                    <h3 class="text-2xl font-bold text-gray-800">How I know this</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        I didn't just guess this. When I started studying at university, I took it as a personal project
+                        to understand the absolute best way to self-study. I dug into the mechanics of learning through
+                        resources like the <em>Learning How to Learn</em> Coursera course and the science-backed book
+                        <em>Make It Stick</em>.
+                    </p>
+                    <p class="text-gray-600 leading-relaxed">
+                        I ended up giving a lecture on what science says about learning at the OpCode Club to wrap up
+                        our year. It's a bit more effort upfront to study this way, but you stop wasting hours on things
+                        that just <em>feel</em> like studying, and you remember more effectively.
+                    </p>
+                </div>
+                <div class="w-full md:w-6/12 shrink-0 flex flex-col items-center">
+                    <img src="media/lecture-image.jpg" alt="Lecturing at OpCode Club"
+                        class="rounded-2xl shadow-sm border border-gray-100 w-full h-auto object-contain bg-white">
+                    <span class="text-xs text-gray-400 mt-3 font-medium">Lecturing at OpCode Club ✨</span>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+</body>
+
+</html>

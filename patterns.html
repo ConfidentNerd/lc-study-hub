@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Pattern Practice</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="h-screen bg-gray-50 text-gray-800 font-sans flex flex-col selection:bg-indigo-100 selection:text-indigo-900">
+
+  <div class="bg-white border-b border-gray-100 px-6 py-4 flex justify-between items-center shrink-0 shadow-sm z-50 sticky top-0">
+    <h1 class="font-bold text-xl text-gray-700 flex items-center gap-2">
+      <span>📚</span>
+      <a href="index.html" class="hover:text-indigo-500 transition-colors">LC Study Hub</a>
+    </h1>
+    <div class="flex gap-5 text-sm font-semibold text-gray-500 items-center">
+      <a href="patterns.html" aria-current="page" class="text-indigo-700 bg-indigo-100 px-3 py-1 rounded-full">Pattern Practice</a>
+      <a href="python4leetcode.html" class="hover:text-indigo-500 transition-colors">Python Syntax</a>
+      <a href="recognition.html" class="hover:text-indigo-500 transition-colors">Pattern Recognition</a>
+    </div>
+  </div>
+
+  <div class="flex flex-1 min-h-0">
+
+    <div class="w-80 bg-white border-r border-gray-200 flex flex-col h-full shadow-sm z-10">
+        <div class="p-4 border-b border-gray-200 font-bold text-lg text-gray-700">
+            Practice Patterns
+        </div>
+        <div id="sidebar-list" class="flex-1 overflow-y-auto p-2 space-y-1">
+            </div>
+    </div>
+
+    <div class="flex-1 flex flex-col h-full overflow-hidden p-6 max-w-[1600px] mx-auto w-full">
+        <h1 id="question-title" class="text-2xl font-bold mb-2"></h1>
+        
+        <pre id="question-text" class="text-gray-700 mb-4 bg-blue-50 p-4 rounded-md border border-blue-100 whitespace-pre-wrap font-sans text-sm"></pre>
+
+        <div id="practice-container" class="hidden mb-4 bg-green-50 border border-green-200 p-4 rounded-md shadow-sm">
+            <div id="when-to-use-section" class="mb-3">
+                <h4 class="font-semibold text-green-800 mb-1">When to Use</h4>
+                <ul id="when-to-use-list" class="list-disc pl-5 text-green-700 text-sm space-y-1"></ul>
+            </div>
+            <h3 class="font-bold text-green-800 mb-2">Recommended Practice:</h3>
+            <ul id="practice-list" class="list-disc pl-5 text-green-700 text-sm space-y-1"></ul>
+        </div>
+
+        <div class="flex-1 flex flex-row gap-4 min-h-0 relative">
+            
+            <div id="editor-wrapper" class="w-full flex flex-col transition-all duration-300">
+                <div class="bg-gray-200 px-4 py-1 text-xs font-bold text-gray-600 rounded-t-md uppercase tracking-wider">Your Code</div>
+                <div id="editor-container" class="flex-1 border border-gray-300 rounded-b-md overflow-hidden bg-white"></div>
+            </div>
+
+            <div id="solution-wrapper" class="hidden w-1/2 flex flex-col transition-all duration-300">
+                <div class="bg-gray-800 px-4 py-1 text-xs font-bold text-gray-300 rounded-t-md uppercase tracking-wider">Solution</div>
+                <pre id="solution-container" class="flex-1 overflow-y-auto bg-gray-900 text-green-400 p-6 rounded-b-md shadow-inner text-sm font-mono m-0"></pre>
+            </div>
+            
+        </div>
+
+        <div class="mt-4 flex gap-4 shrink-0">
+            <button id="reveal-btn" onclick="toggleSolution()" class="px-6 py-2 bg-indigo-600 text-white font-semibold rounded hover:bg-indigo-700 transition-colors shadow-sm">
+                Reveal Solution & Compare
+            </button>
+        </div>
+    </div>
+
+    </div>
+
+    <script>
+        // The complete array of 17 patterns with corrected code and practice questions
+        const patternsData = [
+          {
+            id: "two-pointers",
+            title: "1. Two Pointers",
+            question: "When to use:\n- Searching pairs in a sorted array\n- Comparing elements from both ends\n- Removing duplicates\n\nWhat is the Two Pointers pattern template?",
+            template: "def two_pointers(arr):\n    ",
+            solution: `def two_pointers(arr):\n    left, right = 0, len(arr) - 1\n    while left < right:\n        # Process elements at arr[left] and arr[right]\n        if condition_met:\n            # Do something\n            left += 1\n            right -= 1\n        elif need_to_move_left:\n            left += 1\n        else:\n            right -= 1\n    return result`,
+            practice: ["Valid Palindrome", "3Sum", "Container With Most Water", "Remove Duplicates from Sorted Array", "Trapping Rain Water"]
+          },
+          {
+            id: "sliding-window",
+            title: "2. Sliding Window",
+            question: "When to use:\n- Finding subarrays/substrings meeting conditions\n- Calculating running averages/sums\n\nWhat is the Sliding Window pattern template?",
+            template: "def sliding_window(arr):\n    ",
+            solution: `def sliding_window(arr):\n    left = 0\n    window_sum = 0\n    result = 0\n    for right in range(len(arr)):\n        window_sum += arr[right]\n        while condition_not_met:\n            window_sum -= arr[left]\n            left += 1\n        result = max(result, right - left + 1)\n    return result`,
+            practice: ["Longest Substring Without Repeating Characters", "Minimum Window Substring", "Longest Repeating Character Replacement", "Maximum Sum Subarray of Size K", "Permutation in String"]
+          },
+          {
+            id: "fast-slow-pointers",
+            title: "3. Fast and Slow Pointers",
+            question: "When to use:\n- Detecting cycles in a linked list\n- Finding the middle element\n\nWhat is the Fast and Slow Pointers template?",
+            template: "def fast_slow_pointers(head):\n    ",
+            solution: `def fast_slow_pointers(head):\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n        if slow == fast:\n            return True  # Cycle detected\n    return False`,
+            practice: ["Linked List Cycle", "Find the Duplicate Number", "Middle of the Linked List", "Happy Number", "Palindrome Linked List"]
+          },
+          {
+            id: "merge-intervals",
+            title: "4. Merge Intervals",
+            question: "When to use:\n- Merging overlapping intervals\n- Finding conflicts in schedules\n\nWhat is the Merge Intervals template?",
+            template: "def merge_intervals(intervals):\n    ",
+            solution: `def merge_intervals(intervals):\n    intervals.sort(key=lambda x: x[0])\n    merged = []\n    for interval in intervals:\n        if not merged or merged[-1][1] < interval[0]:\n            merged.append(interval)\n        else:\n            merged[-1][1] = max(merged[-1][1], interval[1])\n    return merged`,
+            practice: ["Merge Intervals", "Insert Interval", "Non-overlapping Intervals", "Meeting Rooms II", "Employee Free Time"]
+          },
+          {
+            id: "cyclic-sort",
+            title: "5. Cyclic Sort",
+            question: "When to use:\n- Finding missing numbers\n- Detecting duplicates in a specific range\n\nWhat is the Cyclic Sort template?",
+            template: "def cyclic_sort(nums):\n    ",
+            solution: `def cyclic_sort(nums):\n    i = 0\n    while i < len(nums):\n        correct_pos = nums[i] - 1\n        if nums[i] != nums[correct_pos]:\n            nums[i], nums[correct_pos] = nums[correct_pos], nums[i]\n        else:\n            i += 1\n    return nums`,
+            practice: ["Missing Number", "Find All Numbers Disappeared in an Array", "Find the Duplicate Number", "First Missing Positive", "Kth Missing Positive Number"]
+          },
+          {
+            id: "inplace-reversal-ll",
+            title: "6. In-place Reversal of a Linked List",
+            question: "When to use:\n- Reversing a linked list or its subparts\n\nWhat is the In-place Reversal template?",
+            template: "def reverse_linked_list(head):\n    ",
+            solution: `def reverse_linked_list(head):\n    prev = None\n    current = head\n    while current:\n        next_node = current.next\n        current.next = prev\n        prev = current\n        current = next_node\n    return prev`,
+            practice: ["Reverse Linked List", "Reverse Linked List II", "Reverse Nodes in k-Group", "Swap Nodes in Pairs", "Rotate List"]
+          },
+          {
+            id: "tree-bfs",
+            title: "7. Tree Breadth-First Search (BFS)",
+            question: "When to use:\n- Level-order traversal of a tree\n- Finding minimum depth\n\nWhat is the Tree BFS template?",
+            template: "from collections import deque\n\ndef bfs(root):\n    ",
+            solution: `from collections import deque\n\ndef bfs(root):\n    if not root:\n        return []\n    queue = deque([root])\n    result = []\n    while queue:\n        level_size = len(queue)\n        current_level = []\n        for _ in range(level_size):\n            node = queue.popleft()\n            current_level.append(node.val)\n            if node.left:\n                queue.append(node.left)\n            if node.right:\n                queue.append(node.right)\n        result.append(current_level)\n    return result`,
+            practice: ["Binary Tree Level Order Traversal", "Binary Tree Zigzag Level Order Traversal", "Minimum Depth of Binary Tree", "Binary Tree Right Side View", "Average of Levels in Binary Tree"]
+          },
+          {
+            id: "tree-dfs",
+            title: "8. Tree Depth-First Search (DFS)",
+            question: "When to use:\n- Path sum problems\n- Tree diameter calculation\n\nWhat is the Tree DFS template?",
+            template: "def dfs(root):\n    ",
+            solution: `def dfs(root):\n    if not root:\n        return\n    # Process current node\n    dfs(root.left)\n    dfs(root.right)`,
+            practice: ["Path Sum", "Binary Tree Maximum Path Sum", "Diameter of Binary Tree", "Validate Binary Search Tree", "Flatten Binary Tree to Linked List"]
+          },
+          {
+            id: "two-heaps",
+            title: "9. Two Heaps",
+            question: "When to use:\n- Finding the median in a stream\n- Scheduling problems\n\nWhat is the Two Heaps (Median Finder) template?",
+            template: "import heapq\n\nclass MedianFinder:\n    def __init__(self):\n        ",
+            solution: `import heapq\n\nclass MedianFinder:\n    def __init__(self):\n        self.small = []  # max heap\n        self.large = []  # min heap\n\n    def addNum(self, num: int) -> None:\n        if len(self.small) == len(self.large):\n            heapq.heappush(self.large, -heapq.heappushpop(self.small, -num))\n        else:\n            heapq.heappush(self.small, -heapq.heappushpop(self.large, num))\n\n    def findMedian(self) -> float:\n        if len(self.small) == len(self.large):\n            return (-self.small[0] + self.large[0]) / 2.0\n        else:\n            return float(self.large[0])`,
+            practice: ["Find Median from Data Stream", "Sliding Window Median", "IPO", "Find Right Interval", "Schedule Tasks on Minimum Machines"]
+          },
+          {
+            id: "subsets",
+            title: "10. Subsets",
+            question: "When to use:\n- Generating all subsets\n- Creating permutations\n\nWhat is the Subsets (Backtracking) template?",
+            template: "def subsets(nums):\n    ",
+            solution: `def subsets(nums):\n    result = []\n    def backtrack(start, current):\n        result.append(current[:])\n        for i in range(start, len(nums)):\n            current.append(nums[i])\n            backtrack(i + 1, current)\n            current.pop()\n    backtrack(0, [])\n    return result`,
+            practice: ["Subsets", "Permutations", "Combination Sum", "Letter Combinations of a Phone Number", "Generate Parentheses"]
+          },
+          {
+            id: "modified-binary-search",
+            title: "11. Modified Binary Search",
+            question: "When to use:\n- Searching in a rotated array\n- Finding a peak element\n\nWhat is the Modified Binary Search template?",
+            template: "def binary_search(arr, target):\n    ",
+            solution: `def binary_search(arr, target):\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = left + (right - left) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1`,
+            practice: ["Search in Rotated Sorted Array", "Find Minimum in Rotated Sorted Array", "Peak Index in a Mountain Array", "Search a 2D Matrix", "Find K Closest Elements"]
+          },
+          {
+            id: "topological-sort",
+            title: "12. Topological Sort",
+            question: "When to use:\n- Course scheduling\n- Build dependencies\n\nWhat is the Topological Sort template?",
+            template: "from collections import defaultdict, deque\n\ndef topological_sort(num_nodes, edges):\n    ",
+            solution: `from collections import defaultdict, deque\n\ndef topological_sort(num_nodes, edges):\n    graph = defaultdict(list)\n    in_degree = [0] * num_nodes\n    for src, dest in edges:\n        graph[src].append(dest)\n        in_degree[dest] += 1\n    \n    queue = deque([node for node in range(num_nodes) if in_degree[node] == 0])\n    result = []\n    \n    while queue:\n        node = queue.popleft()\n        result.append(node)\n        for neighbor in graph[node]:\n            in_degree[neighbor] -= 1\n            if in_degree[neighbor] == 0:\n                queue.append(neighbor)\n    \n    return result if len(result) == num_nodes else []`,
+            practice: ["Course Schedule", "Course Schedule II", "Alien Dictionary", "Minimum Height Trees", "Sequence Reconstruction"]
+          },
+          {
+            id: "dynamic-programming",
+            title: "13. Dynamic Programming",
+            question: "When to use:\n- Optimization problems\n- Counting problems\n\nWhat is the basic Dynamic Programming template?",
+            template: "def dynamic_programming(n):\n    ",
+            solution: `def dynamic_programming(n):\n    dp = [0] * (n + 1)\n    dp[0] = 1\n    dp[1] = 1\n    for i in range(2, n + 1):\n        dp[i] = dp[i-1] + dp[i-2]\n    return dp[n]`,
+            practice: ["Climbing Stairs", "Coin Change", "Longest Increasing Subsequence", "Word Break", "Regular Expression Matching"]
+          },
+          {
+            id: "bitwise-xor",
+            title: "14. Bitwise XOR",
+            question: "When to use:\n- Finding a missing number\n- Detecting a single number in pairs\n\nWhat is the Bitwise XOR template?",
+            template: "def find_single_number(nums):\n    ",
+            solution: `def find_single_number(nums):\n    result = 0\n    for num in nums:\n        result ^= num\n    return result`,
+            practice: ["Single Number", "Missing Number", "Find the Duplicate Number", "Decode XORed Array", "XOR Queries of a Subarray"]
+          },
+          {
+            id: "graph-traversal",
+            title: "15. Graph Traversal",
+            question: "When to use:\n- Finding shortest paths\n- Detecting cycles\n\nWhat is the Graph Traversal (BFS) template?",
+            template: "from collections import defaultdict, deque\n\ndef bfs(graph, start):\n    ",
+            solution: `from collections import defaultdict, deque\n\ndef bfs(graph, start):\n    visited = set()\n    queue = deque([start])\n    visited.add(start)\n    \n    while queue:\n        node = queue.popleft()\n        # Process node\n        for neighbor in graph[node]:\n            if neighbor not in visited:\n                visited.add(neighbor)\n                queue.append(neighbor)`,
+            practice: ["Number of Islands", "Clone Graph", "Pacific Atlantic Water Flow", "Word Ladder", "Graph Valid Tree"]
+          },
+          {
+            id: "monotonic-stack",
+            title: "16. Monotonic Stack/Queue",
+            question: "When to use:\n- Finding the next greater/smaller element\n- Histogram problems\n\nWhat is the Monotonic Stack template?",
+            template: "def monotonic_stack(arr):\n    ",
+            solution: `def monotonic_stack(arr):\n    # This is the corrected template for finding the 'Next Greater Element'\n    stack = []\n    result = [-1] * len(arr)\n    \n    for i in range(len(arr)):\n        # While stack is not empty and current element is greater than the element at stack top index\n        while stack and arr[stack[-1]] < arr[i]:\n            idx = stack.pop()\n            result[idx] = arr[i] # Resolve the answer for the popped index\n        \n        # Push current index to stack\n        stack.append(i)\n        \n    return result`,
+            practice: ["Next Greater Element I", "Daily Temperatures", "Largest Rectangle in Histogram", "Trapping Rain Water", "Remove K Digits"]
+          },
+          {
+            id: "trie",
+            title: "17. Trie (Prefix Tree)",
+            question: "When to use:\n- Autocomplete features\n- Efficient string storage/search\n\nWhat is the Trie template?",
+            template: "class TrieNode:\n    def __init__(self):\n        \n\nclass Trie:\n    def __init__(self):\n        ",
+            solution: `class TrieNode:\n    def __init__(self):\n        self.children = {}\n        self.is_end = False\n\nclass Trie:\n    def __init__(self):\n        self.root = TrieNode()\n    \n    def insert(self, word):\n        node = self.root\n        for char in word:\n            if char not in node.children:\n                node.children[char] = TrieNode()\n            node = node.children[char]\n        node.is_end = True\n    \n    def search(self, word):\n        node = self.root\n        for char in word:\n            if char not in node.children:\n                return False\n            node = node.children[char]\n        return node.is_end`,
+            practice: ["Implement Trie (Prefix Tree)", "Word Search II", "Design Add and Search Words Data Structure", "Replace Words", "Palindrome Pairs"]
+          }
+        ];
+
+        let currentIndex = 0;
+        let isRevealed = false;
+
+        // Renders the clickable sidebar buttons
+        function renderSidebar() {
+            const list = document.getElementById('sidebar-list');
+            list.innerHTML = '';
+            
+            patternsData.forEach((pattern, index) => {
+                const btn = document.createElement('button');
+                // Highlight the currently selected pattern
+                btn.className = `w-full text-left px-4 py-2 rounded-md text-sm transition-colors ${index === currentIndex ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-gray-600 hover:bg-gray-100'}`;
+                btn.innerText = pattern.title;
+                btn.onclick = () => loadPattern(index);
+                list.appendChild(btn);
+            });
+        }
+
+        // Loads a pattern into the UI and resets state
+        function loadPattern(index) {
+            currentIndex = index;
+            isRevealed = false; // Reset to editing mode
+            
+            const pattern = patternsData[index];
+            document.getElementById('question-title').innerText = pattern.title;
+            const questionParts = pattern.question.split(/\n\s*\n/);
+            let whenText = '';
+            let questionText = pattern.question;
+            if (questionParts.length > 1 && /^When to use:/i.test(questionParts[0].trim())) {
+                whenText = questionParts[0].trim().replace(/^When to use:\s*/i, '').trim();
+                questionText = questionParts.slice(1).join('\n\n').trim();
+            }
+            document.getElementById('question-text').innerText = questionText;
+            document.getElementById('solution-container').innerText = pattern.solution;
+            
+            const whenList = document.getElementById('when-to-use-list');
+            whenList.innerHTML = '';
+            whenText.split(/\n/).map(line => line.replace(/^\s*-\s*/, '').trim()).filter(Boolean).forEach(item => {
+                const li = document.createElement('li');
+                li.innerText = item;
+                whenList.appendChild(li);
+            });
+            
+            // Build the practice questions list
+            const practiceList = document.getElementById('practice-list');
+            practiceList.innerHTML = '';
+            pattern.practice.forEach(prob => {
+                const li = document.createElement('li');
+                // Link opens a Google search for the specific LeetCode problem
+                li.innerHTML = `<a href="https://www.google.com/search?q=LeetCode+${encodeURIComponent(prob)}" target="_blank" class="hover:underline hover:text-green-800">${prob}</a>`;
+                practiceList.appendChild(li);
+            });
+            
+            // Reset Layout classes
+            document.getElementById('editor-wrapper').className = "w-full flex flex-col transition-all duration-300";
+            document.getElementById('solution-wrapper').className = "hidden w-1/2 flex flex-col transition-all duration-300";
+            document.getElementById('practice-container').classList.add('hidden');
+            
+            // Reset Button
+            const btn = document.getElementById('reveal-btn');
+            btn.innerText = "Reveal Solution & Compare";
+            btn.classList.replace('bg-gray-600', 'bg-indigo-600');
+            btn.classList.replace('hover:bg-gray-700', 'hover:bg-indigo-700');
+            
+            // Inject template and make editable
+            if (window.editor) {
+                window.editor.setValue(pattern.template);
+                window.editor.updateOptions({ readOnly: false });
+            }
+            
+            renderSidebar();
+        }
+
+        // Toggles between full-width editor and side-by-side comparison
+        function toggleSolution() {
+            isRevealed = !isRevealed;
+            const editorWrapper = document.getElementById('editor-wrapper');
+            const solutionWrapper = document.getElementById('solution-wrapper');
+            const practiceContainer = document.getElementById('practice-container');
+            const btn = document.getElementById('reveal-btn');
+
+            if (isRevealed) {
+                // Show side-by-side comparison
+                editorWrapper.className = "w-1/2 flex flex-col transition-all duration-300";
+                solutionWrapper.className = "w-1/2 flex flex-col transition-all duration-300 border-l border-gray-300";
+                practiceContainer.classList.remove('hidden');
+                
+                // Lock the editor so user doesn't accidentally edit while comparing
+                window.editor.updateOptions({ readOnly: true });
+
+                btn.innerText = "Hide Solution & Resume Editing";
+                btn.classList.replace('bg-indigo-600', 'bg-gray-600');
+                btn.classList.replace('hover:bg-indigo-700', 'hover:bg-gray-700');
+            } else {
+                // Hide solution, return editor to full width
+                editorWrapper.className = "w-full flex flex-col transition-all duration-300";
+                solutionWrapper.className = "hidden w-1/2 flex flex-col transition-all duration-300 border-l border-gray-300";
+                practiceContainer.classList.add('hidden');
+                
+                // Unlock the editor
+                window.editor.updateOptions({ readOnly: false });
+
+                btn.innerText = "Reveal Solution & Compare";
+                btn.classList.replace('bg-gray-600', 'bg-indigo-600');
+                btn.classList.replace('hover:bg-gray-700', 'hover:bg-indigo-700');
+            }
+        }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.38.0/min/vs/loader.min.js"></script>
+    <script>
+        require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.38.0/min/vs' }});
+        require(['vs/editor/editor.main'], function() {
+            window.editor = monaco.editor.create(document.getElementById('editor-container'), {
+                value: "",
+                language: 'python',
+                theme: 'vs-light',
+                minimap: { enabled: false }, // Keep UI clean
+                automaticLayout: true,       // Ensures canvas resizes when flexbox changes widths
+                fontSize: 14,
+                padding: { top: 16 },
+                
+                // === AUTO-COMPLETE DISABLED FLAGS ===
+                quickSuggestions: false,               // Disables automatic popups as you type
+                suggestOnTriggerCharacters: false,     // Disables popups triggered by characters like '.' or '('
+                parameterHints: { enabled: false },    // Disables function signature popups
+                snippetSuggestions: "none",            // Disables snippet auto-filling
+                wordBasedSuggestions: false            // Disables suggesting words from the document
+            });
+            
+            // Initialize app
+            loadPattern(0);
+        });
+    </script>
+</body>
+</html>

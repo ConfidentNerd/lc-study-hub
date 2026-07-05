@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pattern Recognition Practice</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Hide scrollbar for the hover sidebar but allow scrolling */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800 font-sans h-screen flex flex-col overflow-hidden relative selection:bg-indigo-100 selection:text-indigo-900">
+
+    <div class="bg-white border-b border-gray-100 px-6 py-4 flex justify-between items-center shrink-0 shadow-sm z-50 sticky top-0">
+        <h1 class="font-bold text-xl text-gray-700 flex items-center gap-2">
+            <span>📚</span>
+            <a href="index.html" class="hover:text-indigo-500 transition-colors">LC Study Hub</a>
+        </h1>
+        <div class="flex gap-5 text-sm font-semibold text-gray-500 items-center">
+            <a href="patterns.html" class="hover:text-indigo-500 transition-colors">Pattern Practice</a>
+            <a href="python4leetcode.html" class="hover:text-indigo-500 transition-colors">Python Syntax</a>
+            <a href="recognition.html" aria-current="page" class="text-indigo-700 bg-indigo-100 px-3 py-1 rounded-full">Pattern Recognition</a>
+        </div>
+    </div>
+
+    <div class="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center shrink-0 shadow-sm z-10">
+        <div class="flex items-center gap-4">
+            <h2 class="font-bold text-xl text-gray-700">Pattern Recognition</h2>
+            <div class="h-6 w-px bg-gray-300"></div>
+            <div class="flex gap-2 text-sm">
+                <button onclick="startTimer(5)"
+                    class="px-3 py-1 bg-gray-100 hover:bg-indigo-100 text-gray-700 hover:text-indigo-700 rounded transition-colors">5
+                    min</button>
+                <button onclick="startTimer(10)"
+                    class="px-3 py-1 bg-gray-100 hover:bg-indigo-100 text-gray-700 hover:text-indigo-700 rounded transition-colors">10
+                    min</button>
+                <button onclick="startTimer(15)"
+                    class="px-3 py-1 bg-gray-100 hover:bg-indigo-100 text-gray-700 hover:text-indigo-700 rounded transition-colors">15
+                    min</button>
+            </div>
+            <div id="timer-display" class="font-mono text-lg font-bold text-gray-400 ml-2">--:--</div>
+        </div>
+
+        <div class="flex gap-4 font-bold text-lg">
+            <div class="text-green-600">✅ <span id="score-correct">0</span></div>
+            <div class="text-red-500">❌ <span id="score-missed">0</span></div>
+        </div>
+    </div>
+
+    <div class="flex-1 flex justify-center items-center p-6 overflow-y-auto relative z-0">
+        <div class="max-w-3xl w-full flex flex-col gap-6" id="app-container">
+
+            <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-200">
+                <div class="flex justify-between items-start mb-4">
+                    <h2 id="q-title" class="text-2xl font-bold text-gray-800">Loading...</h2>
+                    <span id="q-difficulty"
+                        class="px-3 py-1 text-xs font-bold rounded-full uppercase tracking-wider"></span>
+                </div>
+                <div id="q-description"
+                    class="text-gray-600 leading-relaxed whitespace-pre-wrap bg-blue-50 p-4 rounded-md border border-blue-100 font-sans">
+                </div>
+            </div>
+
+            <button id="reveal-btn" onclick="revealAnswer()"
+                class="w-full py-4 bg-indigo-600 text-white font-bold text-lg rounded-xl hover:bg-indigo-700 transition-colors shadow-sm">
+                Reveal Pattern
+            </button>
+
+            <div id="reveal-section" class="hidden flex-col gap-4">
+                <div class="bg-green-50 border border-green-200 p-6 rounded-xl shadow-sm">
+                    <h3 class="text-sm font-bold text-green-800 uppercase tracking-wider mb-1">Correct Pattern</h3>
+                    <p id="r-pattern" class="text-2xl font-bold text-green-700 mb-3"></p>
+
+                    <h3 class="text-sm font-bold text-green-800 uppercase tracking-wider mb-1 mt-4">Why? (The Clues)
+                    </h3>
+                    <p id="r-clues" class="text-green-900"></p>
+
+                    <div class="mt-4 pt-4 border-t border-green-200">
+                        <a id="r-link" href="#" target="_blank"
+                            class="text-indigo-600 hover:text-indigo-800 font-semibold text-sm flex items-center gap-1">
+                            View on LeetCode →
+                        </a>
+                    </div>
+                </div>
+
+                <div class="flex gap-4 mt-2">
+                    <button onclick="recordAnswer(false)"
+                        class="flex-1 py-3 bg-red-100 text-red-700 hover:bg-red-200 font-bold rounded-xl transition-colors">
+                        Missed It 👎
+                    </button>
+                    <button onclick="recordAnswer(true)"
+                        class="flex-1 py-3 bg-green-500 text-white hover:bg-green-600 font-bold rounded-xl transition-colors shadow-sm">
+                        Got It 👍
+                    </button>
+                </div>
+            </div>
+
+            <div id="end-screen" class="hidden bg-white p-8 rounded-xl shadow-sm border border-gray-200 text-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Time's Up!</h2>
+                <p class="text-gray-600 mb-6">Here is how you did this session:</p>
+                <div class="flex justify-center gap-8 mb-8">
+                    <div class="text-center">
+                        <div class="text-4xl font-black text-green-600" id="final-correct">0</div>
+                        <div class="text-sm font-bold text-gray-500 uppercase tracking-wider mt-1">Correct</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-black text-red-500" id="final-missed">0</div>
+                        <div class="text-sm font-bold text-gray-500 uppercase tracking-wider mt-1">Missed</div>
+                    </div>
+                </div>
+                <button onclick="location.reload()"
+                    class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-colors">
+                    Start New Session
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <div
+        class="fixed bottom-0 left-0 w-full h-8 hover:h-64 bg-gray-900 text-white transition-all duration-300 z-50 flex flex-col overflow-hidden shadow-2xl group border-t border-gray-700">
+        <div class="h-8 shrink-0 flex items-center justify-center bg-gray-800 border-b border-gray-700 w-full">
+            <span class="whitespace-nowrap text-xs font-bold text-gray-400 tracking-widest uppercase">Hover for
+                Patterns</span>
+        </div>
+        <div
+            class="flex-1 p-4 overflow-y-auto no-scrollbar opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
+            <h3 class="font-bold text-lg mb-4 text-indigo-400 border-b border-gray-700 pb-2">Pattern Reference</h3>
+            <ul id="cheat-sheet-list" class="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-2 text-sm text-gray-300">
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. THE DATA: 30 Curated Classic Questions ---
+        // Manually mapped to your exact 17 pattern IDs
+        const patternsMap = {
+            "two-pointers": "Two Pointers",
+            "sliding-window": "Sliding Window",
+            "fast-slow-pointers": "Fast and Slow Pointers",
+            "merge-intervals": "Merge Intervals",
+            "cyclic-sort": "Cyclic Sort",
+            "inplace-reversal-ll": "In-place Reversal of a Linked List",
+            "tree-bfs": "Tree BFS",
+            "tree-dfs": "Tree DFS",
+            "two-heaps": "Two Heaps",
+            "subsets": "Subsets (Backtracking)",
+            "modified-binary-search": "Modified Binary Search",
+            "topological-sort": "Topological Sort",
+            "dynamic-programming": "Dynamic Programming",
+            "bitwise-xor": "Bitwise XOR",
+            "graph-traversal": "Graph Traversal",
+            "monotonic-stack": "Monotonic Stack",
+            "trie": "Trie (Prefix Tree)"
+        };
+
+        const questionsData = [
+            {
+                title: "Two Sum II - Input Array Is Sorted", difficulty: "Medium", patternId: "two-pointers", url: "https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/",
+                clues: "The array is already sorted. We need to find a pair. Starting pointers at opposite ends lets us safely rule out elements based on the sum.",
+                description: "Given a 1-indexed array of integers numbers that is already sorted in non-decreasing order, find two numbers such that they add up to a specific target number."
+            },
+
+            {
+                title: "Longest Substring Without Repeating Characters", difficulty: "Medium", patternId: "sliding-window", url: "https://leetcode.com/problems/longest-substring-without-repeating-characters/",
+                clues: "Keywords: 'longest', 'substring'. We need to track a continuous block of characters and shrink it from the left when a duplicate appears.",
+                description: "Given a string s, find the length of the longest substring without repeating characters."
+            },
+
+            {
+                title: "Linked List Cycle", difficulty: "Easy", patternId: "fast-slow-pointers", url: "https://leetcode.com/problems/linked-list-cycle/",
+                clues: "Detecting a cycle in a linked structure without extra memory perfectly fits moving two pointers at different speeds.",
+                description: "Given head, the head of a linked list, determine if the linked list has a cycle in it."
+            },
+
+            {
+                title: "Merge Intervals", difficulty: "Medium", patternId: "merge-intervals", url: "https://leetcode.com/problems/merge-intervals/",
+                clues: "Deals directly with overlapping ranges. Sorting by start time and comparing the end time of the previous interval is the standard approach.",
+                description: "Given an array of intervals where intervals[i] = [start_i, end_i], merge all overlapping intervals, and return an array of the non-overlapping intervals."
+            },
+
+            {
+                title: "Missing Number", difficulty: "Easy", patternId: "cyclic-sort", url: "https://leetcode.com/problems/missing-number/",
+                clues: "Array contains numbers in a specific range [0, n]. Elements can be placed at their 'correct' indices (index == value) to easily spot the missing one. (Bitwise XOR is also valid here).",
+                description: "Given an array nums containing n distinct numbers in the range [0, n], return the only number in the range that is missing from the array."
+            },
+
+            {
+                title: "Reverse Linked List", difficulty: "Easy", patternId: "inplace-reversal-ll", url: "https://leetcode.com/problems/reverse-linked-list/",
+                clues: "Core mechanic of changing node.next pointers to point backwards without creating a new list.",
+                description: "Given the head of a singly linked list, reverse the list, and return the reversed list."
+            },
+
+            {
+                title: "Binary Tree Level Order Traversal", difficulty: "Medium", patternId: "tree-bfs", url: "https://leetcode.com/problems/binary-tree-level-order-traversal/",
+                clues: "Keyword: 'level by level'. Exploring breadth before depth requires a Queue to track nodes at the current depth.",
+                description: "Given the root of a binary tree, return the level order traversal of its nodes' values. (i.e., from left to right, level by level)."
+            },
+
+            {
+                title: "Diameter of Binary Tree", difficulty: "Easy", patternId: "tree-dfs", url: "https://leetcode.com/problems/diameter-of-binary-tree/",
+                clues: "Requires exploring paths all the way to the leaf nodes to calculate max depth of left and right subtrees.",
+                description: "Given the root of a binary tree, return the length of the diameter of the tree. The diameter is the length of the longest path between any two nodes."
+            },
+
+            {
+                title: "Find Median from Data Stream", difficulty: "Hard", patternId: "two-heaps", url: "https://leetcode.com/problems/find-median-from-data-stream/",
+                clues: "We need dynamic access to the middle elements of a stream. Maintaining a max-heap for the smaller half and a min-heap for the larger half makes this O(1).",
+                description: "Implement the MedianFinder class that receives a data stream of integers and can return the median of all elements so far."
+            },
+
+            {
+                title: "Permutations", difficulty: "Medium", patternId: "subsets", url: "https://leetcode.com/problems/permutations/",
+                clues: "Asking to generate *all possible combinations/arrangements*. This requires backtracking/recursion to build combinations and undo choices.",
+                description: "Given an array nums of distinct integers, return all the possible permutations. You can return the answer in any order."
+            },
+
+            {
+                title: "Search in Rotated Sorted Array", difficulty: "Medium", patternId: "modified-binary-search", url: "https://leetcode.com/problems/search-in-rotated-sorted-array/",
+                clues: "Array is sorted but shifted. O(log n) requirement means binary search, but we must adjust the logic to figure out which half is normally sorted.",
+                description: "There is an integer array nums sorted in ascending order (with distinct values). Prior to being passed to your function, nums is possibly rotated..."
+            },
+
+            {
+                title: "Course Schedule", difficulty: "Medium", patternId: "topological-sort", url: "https://leetcode.com/problems/course-schedule/",
+                clues: "Keywords: 'prerequisites', 'dependencies'. We need to process nodes in a directed graph in a specific order based on incoming edges (in-degrees).",
+                description: "There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [a_i, b_i] indicates that you must take course b_i first if you want to take course a_i."
+            },
+
+            {
+                title: "Climbing Stairs", difficulty: "Easy", patternId: "dynamic-programming", url: "https://leetcode.com/problems/climbing-stairs/",
+                clues: "Optimization/counting problem where current state relies on previous states (n-1 and n-2).",
+                description: "You are climbing a staircase. It takes n steps to reach the top. Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?"
+            },
+
+            {
+                title: "Single Number", difficulty: "Easy", patternId: "bitwise-xor", url: "https://leetcode.com/problems/single-number/",
+                clues: "Pairs of numbers. XORing identical numbers cancels them out to 0, leaving only the unique number. Fits the O(1) space constraint perfectly.",
+                description: "Given a non-empty array of integers nums, every element appears twice except for one. Find that single one. You must implement a solution with a linear runtime complexity and use only constant extra space."
+            },
+
+            {
+                title: "Number of Islands", difficulty: "Medium", patternId: "graph-traversal", url: "https://leetcode.com/problems/number-of-islands/",
+                clues: "A 2D matrix representing a grid. We need to explore connected components ('1's) and mark them as visited using BFS or DFS.",
+                description: "Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands."
+            },
+
+            {
+                title: "Daily Temperatures", difficulty: "Medium", patternId: "monotonic-stack", url: "https://leetcode.com/problems/daily-temperatures/",
+                clues: "Looking for the 'Next Greater Element'. Maintaining a stack of indices that strictly decreases in temperature allows us to resolve past days when a warmer day arrives.",
+                description: "Given an array of integers temperatures represents the daily temperatures, return an array answer such that answer[i] is the number of days you have to wait after the ith day to get a warmer temperature."
+            },
+
+            {
+                title: "Implement Trie (Prefix Tree)", difficulty: "Medium", patternId: "trie", url: "https://leetcode.com/problems/implement-trie-prefix-tree/",
+                clues: "Requires fast retrieval of strings and string prefixes.",
+                description: "A trie (pronounced as 'try') or prefix tree is a tree data structure used to efficiently store and retrieve keys in a dataset of strings."
+            },
+
+            {
+                title: "Container With Most Water", difficulty: "Medium", patternId: "two-pointers", url: "https://leetcode.com/problems/container-with-most-water/",
+                clues: "Maximize area. Start with the widest container (pointers at both ends), and move the pointer pointing to the shorter line inward to potentially find a taller line.",
+                description: "You are given an integer array height of length n. There are n vertical lines drawn... Find two lines that together with the x-axis form a container, such that the container contains the most water."
+            },
+
+            {
+                title: "Minimum Window Substring", difficulty: "Hard", patternId: "sliding-window", url: "https://leetcode.com/problems/minimum-window-substring/",
+                clues: "Need to find a substring (continuous block) satisfying a condition. Expand right pointer to meet condition, shrink left pointer to minimize length.",
+                description: "Given two strings s and t of lengths m and n respectively, return the minimum window substring of s such that every character in t (including duplicates) is included in the window."
+            },
+
+            {
+                title: "Find the Duplicate Number", difficulty: "Medium", patternId: "fast-slow-pointers", url: "https://leetcode.com/problems/find-the-duplicate-number/",
+                clues: "Array elements are in range [1, n], acting like pointers to next indices. The duplicate creates a cycle. Floyd's cycle detection solves it in O(1) space.",
+                description: "Given an array of integers nums containing n + 1 integers where each integer is in the range [1, n] inclusive. There is only one repeated number in nums, return this repeated number."
+            },
+
+            {
+                title: "3Sum", difficulty: "Medium", patternId: "two-pointers", url: "https://leetcode.com/problems/3sum/",
+                clues: "Sorting the array first allows us to fix one number and use two pointers (left and right) for the remaining array to find triplets that sum to zero while easily skipping duplicates.",
+                description: "Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0."
+            },
+            {
+                title: "Maximum Subarray", difficulty: "Medium", patternId: "kadanes-algorithm", url: "https://leetcode.com/problems/maximum-subarray/",
+                clues: "We need the largest sum of contiguous elements. Kadane's algorithm lets us carry a running sum, resetting it to zero whenever it drops below zero.",
+                description: "Given an integer array nums, find the subarray with the largest sum, and return its sum."
+            },
+            {
+                title: "Middle of the Linked List", difficulty: "Easy", patternId: "fast-slow-pointers", url: "https://leetcode.com/problems/middle-of-the-linked-list/",
+                clues: "If we move one pointer twice as fast as the other, the slow pointer will naturally be at the middle when the fast pointer reaches the end.",
+                description: "Given the head of a singly linked list, return the middle node of the linked list. If there are two middle nodes, return the second middle node."
+            },
+            {
+                title: "Insert Interval", difficulty: "Medium", patternId: "merge-intervals", url: "https://leetcode.com/problems/insert-interval/",
+                clues: "The intervals are already sorted. We can iterate through, adding non-overlapping intervals, merging overlapping ones into our 'newInterval', and then adding the rest.",
+                description: "You are given an array of non-overlapping intervals intervals where intervals[i] = [starti, endi] represent the start and the end of the ith interval and intervals is sorted in ascending order by starti. Insert newInterval into intervals such that intervals is still sorted in ascending order by starti and intervals still does not have any overlapping intervals."
+            },
+            {
+                title: "Find All Numbers Disappeared in an Array", difficulty: "Easy", patternId: "cyclic-sort", url: "https://leetcode.com/problems/find-all-numbers-disappeared-in-an-array/",
+                clues: "Numbers are in the range [1, n]. We can iterate and mark the value at the corresponding index (val - 1) as negative. Any positive values left indicate missing numbers.",
+                description: "Given an array nums of n integers where nums[i] is in the range [1, n], return an array of all the integers in the range [1, n] that do not appear in nums."
+            },
+            {
+                title: "Reverse Nodes in k-Group", difficulty: "Hard", patternId: "inplace-reversal-ll", url: "https://leetcode.com/problems/reverse-nodes-in-k-group/",
+                clues: "This expands on basic list reversal. We need to check if there are k nodes left, and if so, reverse just that sub-list, then connect it back to the main list.",
+                description: "Given the head of a linked list, reverse the nodes of the list k at a time, and return the modified list."
+            },
+            {
+                title: "Binary Tree Right Side View", difficulty: "Medium", patternId: "tree-bfs", url: "https://leetcode.com/problems/binary-tree-right-side-view/",
+                clues: "Using Level Order Traversal (Queue), we can just grab the very last node processed at each depth level.",
+                description: "Given the root of a binary tree, imagine yourself standing on the right side of it, return the values of the nodes you can see ordered from top to bottom."
+            },
+            {
+                title: "Lowest Common Ancestor of a Binary Search Tree", difficulty: "Medium", patternId: "tree-dfs", url: "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/",
+                clues: "Leverage the BST property: if both p and q are greater than the current node, search right. If both are less, search left. Otherwise, the current node is the LCA.",
+                description: "Given a binary search tree (BST), find the lowest common ancestor (LCA) node of two given nodes in the BST."
+            },
+            {
+                title: "Top K Frequent Elements", difficulty: "Medium", patternId: "top-k-elements", url: "https://leetcode.com/problems/top-k-frequent-elements/",
+                clues: "Count frequencies with a hash map, then use a Min-Heap of size K or bucket sort to efficiently pull the top elements without sorting the whole map.",
+                description: "Given an integer array nums and an integer k, return the k most frequent elements. You may return the answer in any order."
+            },
+            {
+                title: "Subsets", difficulty: "Medium", patternId: "subsets", url: "https://leetcode.com/problems/subsets/",
+                clues: "Classic backtracking. At each element, make a decision: either include the current element in the subset, or don't include it, and branch off.",
+                description: "Given an integer array nums of unique elements, return all possible subsets (the power set). The solution set must not contain duplicate subsets."
+            },
+            {
+                title: "Find Minimum in Rotated Sorted Array", difficulty: "Medium", patternId: "modified-binary-search", url: "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/",
+                clues: "If the mid element is greater than the rightmost element, the minimum must be in the right half. Otherwise, it's in the left half (including mid).",
+                description: "Suppose an array of length n sorted in ascending order is rotated between 1 and n times. Given the sorted rotated array nums of unique elements, return the minimum element of this array."
+            },
+            {
+                title: "Course Schedule II", difficulty: "Medium", patternId: "topological-sort", url: "https://leetcode.com/problems/course-schedule-ii/",
+                clues: "Instead of just checking if a cycle exists, we use a queue with in-degrees to track and return the actual traversal order of the graph.",
+                description: "Return the ordering of courses you should take to finish all courses. If there are many valid answers, return any of them. If it is impossible to finish all courses, return an empty array."
+            },
+            {
+                title: "Coin Change", difficulty: "Medium", patternId: "dynamic-programming", url: "https://leetcode.com/problems/coin-change/",
+                clues: "Bottom-up DP. Build an array from 0 to 'amount', finding the minimum coins needed for each intermediate amount by checking 'dp[i - coin] + 1'.",
+                description: "You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money. Return the fewest number of coins that you need to make up that amount."
+            },
+            {
+                title: "Pacific Atlantic Water Flow", difficulty: "Medium", patternId: "graph-traversal", url: "https://leetcode.com/problems/pacific-atlantic-water-flow/",
+                clues: "Instead of going from high to low, start at the ocean borders and run DFS/BFS uphill to see which interior cells can reach both oceans.",
+                description: "There is an m x n rectangular island that borders both the Pacific Ocean and Atlantic Ocean. Return a 2D list of grid coordinates result where result[i] = [ri, ci] denotes that rain water can flow from cell (ri, ci) to both the Pacific and Atlantic oceans."
+            },
+            {
+                title: "Next Greater Element I", difficulty: "Easy", patternId: "monotonic-stack", url: "https://leetcode.com/problems/next-greater-element-i/",
+                clues: "Use a decreasing monotonic stack. If the current number is bigger than the top of the stack, pop from the stack and record the current number as their 'next greater'.",
+                description: "The next greater element of some element x in an array is the first greater element that is to the right of x in the same array. You are given two distinct 0-indexed integer arrays nums1 and nums2, where nums1 is a subset of nums2."
+            },
+            {
+                title: "Design Add and Search Words Data Structure", difficulty: "Medium", patternId: "trie", url: "https://leetcode.com/problems/design-add-and-search-words-data-structure/",
+                clues: "Requires a standard Trie for the 'add' operation. For 'search', the '.' wildcard means we must run a recursive DFS checking all child nodes at that character position.",
+                description: "Design a data structure that supports adding new words and finding if a string matches any previously added string. (Supports '.' as a wildcard character)."
+            },
+            {
+                title: "Trapping Rain Water", difficulty: "Hard", patternId: "two-pointers", url: "https://leetcode.com/problems/trapping-rain-water/",
+                clues: "Water trapped above any block depends on the maximum height to its left and right. Use two pointers converging from both ends, tracking max heights, to calculate on the fly.",
+                description: "Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining."
+            },
+            {
+                title: "Longest Repeating Character Replacement", difficulty: "Medium", patternId: "sliding-window", url: "https://leetcode.com/problems/longest-repeating-character-replacement/",
+                clues: "Keep a frequency map of characters in the window. If window length minus the count of the most frequent character exceeds k, shrink the window from the left.",
+                description: "You are given a string s and an integer k. You can choose any character of the string and change it to any other uppercase English character. You can perform this operation at most k times. Return the length of the longest substring containing the same letter you can get."
+            },
+            {
+                title: "Sort Colors", difficulty: "Medium", patternId: "two-pointers", url: "https://leetcode.com/problems/sort-colors/",
+                clues: "Also known as the Dutch National Flag problem. Use three pointers (low, mid, high) to swap 0s to the front, 2s to the back, and leave 1s in the middle.",
+                description: "Given an array nums with n objects colored red, white, or blue, sort them in-place so that objects of the same color are adjacent, with the colors in the order red, white, and blue."
+            },
+            {
+                title: "K Closest Points to Origin", difficulty: "Medium", patternId: "top-k-elements", url: "https://leetcode.com/problems/k-closest-points-to-origin/",
+                clues: "Compute distances and maintain a Max-Heap of size K. When the heap exceeds size K, pop the maximum distance. You'll be left with the K smallest distances.",
+                description: "Given an array of points where points[i] = [xi, yi] represents a point on the X-Y plane and an integer k, return the k closest points to the origin (0, 0)."
+            },
+
+            {
+                title: "Valid Parentheses", difficulty: "Easy", patternId: "stack", url: "https://leetcode.com/problems/valid-parentheses/",
+                clues: "Requires a LIFO (Last-In-First-Out) approach. Push open brackets onto a stack and ensure every closing bracket matches the most recently seen open bracket.",
+                description: "Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid."
+            },
+            {
+                title: "Combination Sum", difficulty: "Medium", patternId: "subsets", url: "https://leetcode.com/problems/combination-sum/",
+                clues: "We need all unique combinations that sum to a target, and numbers can be reused. This is a classic backtracking scenario where we explore paths and backtrack when the sum exceeds the target.",
+                description: "Given an array of distinct integers candidates and a target integer target, return a list of all unique combinations of candidates where the chosen numbers sum to target."
+            },
+            {
+                title: "Word Search", difficulty: "Medium", patternId: "graph-traversal", url: "https://leetcode.com/problems/word-search/",
+                clues: "Navigating a 2D grid to find a sequence. We need DFS (Depth-First Search) combined with backtracking to mark visited cells and unmark them if the path doesn't yield the word.",
+                description: "Given an m x n grid of characters board and a string word, return true if word exists in the grid."
+            },
+            {
+                title: "Merge k Sorted Lists", difficulty: "Hard", patternId: "k-way-merge", url: "https://leetcode.com/problems/merge-k-sorted-lists/",
+                clues: "Extends the 'Merge Two Sorted Lists' concept. A Min-Heap is perfect here to constantly give us the smallest current node across all k lists in O(log k) time.",
+                description: "You are given an array of k linked-lists lists, each linked-list is sorted in ascending order. Merge all the linked-lists into one sorted linked-list and return it."
+            },
+            {
+                title: "Find All Anagrams in a String", difficulty: "Medium", patternId: "sliding-window", url: "https://leetcode.com/problems/find-all-anagrams-in-a-string/",
+                clues: "We need to find contiguous substrings of a fixed length (length of the target string). Maintain a sliding window and a character frequency map to compare against the target.",
+                description: "Given two strings s and p, return an array of all the start indices of p's anagrams in s. You may return the answer in any order."
+            },
+            {
+                title: "Lowest Common Ancestor of a Binary Tree", difficulty: "Medium", patternId: "tree-dfs", url: "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/",
+                clues: "Unlike a BST, we can't rely on node values to pick a direction. We must use Post-order DFS to bubble up the discovery of nodes p and q to find where their paths converge.",
+                description: "Given a binary tree, find the lowest common ancestor (LCA) of two given nodes in the tree."
+            },
+            {
+                title: "House Robber", difficulty: "Medium", patternId: "dynamic-programming", url: "https://leetcode.com/problems/house-robber/",
+                clues: "Optimization problem where the current max depends on previous choices (we can't pick adjacent elements). dp[i] = max(dp[i-1], dp[i-2] + nums[i]).",
+                description: "You are a professional robber planning to rob houses along a street... you cannot rob adjacent houses. Given an integer array nums representing the amount of money of each house, return the maximum amount of money you can rob tonight."
+            },
+            {
+                title: "Task Scheduler", difficulty: "Medium", patternId: "top-k-elements", url: "https://leetcode.com/problems/task-scheduler/",
+                clues: "We want to execute the most frequent tasks first to optimize the cooldown periods. A Max-Heap paired with a cooldown queue handles this greedily.",
+                description: "Given a characters array tasks, representing the tasks a CPU needs to do, where each letter represents a different task, and a non-negative integer n that represents the cooldown period... return the least number of units of times that the CPU will take to finish all the given tasks."
+            },
+            {
+                title: "Word Break", difficulty: "Medium", patternId: "dynamic-programming", url: "https://leetcode.com/problems/word-break/",
+                clues: "Can string 's' be segmented? We can build a boolean DP array where dp[i] is true if the substring up to 'i' can be broken down into dictionary words.",
+                description: "Given a string s and a dictionary of strings wordDict, return true if s can be segmented into a space-separated sequence of one or more dictionary words."
+            },
+            {
+                title: "Kth Smallest Element in a BST", difficulty: "Medium", patternId: "tree-dfs", url: "https://leetcode.com/problems/kth-smallest-element-in-a-bst/",
+                clues: "Exploit the Binary Search Tree property: an In-order traversal (Left, Node, Right) visits the nodes in strictly ascending sorted order.",
+                description: "Given the root of a binary search tree, and an integer k, return the kth smallest value (1-indexed) of all the values of the nodes in the tree."
+            },
+            {
+                title: "Serialize and Deserialize Binary Tree", difficulty: "Hard", patternId: "tree-bfs", url: "https://leetcode.com/problems/serialize-and-deserialize-binary-tree/",
+                clues: "Need to convert a tree to a string and back. Level-order traversal (BFS with a Queue) is easiest, inserting 'null' markers so we know where leaf nodes terminate.",
+                description: "Design an algorithm to serialize and deserialize a binary tree. There is no restriction on how your serialization/deserialization algorithm should work."
+            },
+            {
+                title: "Meeting Rooms II", difficulty: "Medium", patternId: "merge-intervals", url: "https://leetcode.com/problems/meeting-rooms-ii/",
+                clues: "We need to find the maximum overlap of intervals. We can either separate and sort start/end times, or sort by start time and use a Min-Heap to track the earliest ending meetings.",
+                description: "Given an array of meeting time intervals intervals where intervals[i] = [starti, endi], return the minimum number of conference rooms required."
+            },
+            {
+                title: "Alien Dictionary", difficulty: "Hard", patternId: "topological-sort", url: "https://leetcode.com/problems/alien-dictionary/",
+                clues: "We are given rules about the relative order of characters, creating a dependency graph. Finding a valid order from dependencies means we need Topological Sort.",
+                description: "There is a new alien language that uses the English alphabet. However, the order among the letters is unknown to you. You are given a list of strings words from the alien language's dictionary... Return a string of the unique letters in the new alien language sorted in lexicographically increasing order."
+            },
+            {
+                title: "Rotting Oranges", difficulty: "Medium", patternId: "graph-traversal", url: "https://leetcode.com/problems/rotting-oranges/",
+                clues: "The 'rot' spreads outward step-by-step simultaneously. This is a classic Multi-source BFS. Start by enqueuing all initially rotten oranges and track the minutes/levels.",
+                description: "You are given an m x n grid where each cell can have one of three values: 0 representing an empty cell, 1 representing a fresh orange, or 2 representing a rotten orange. Every minute, any fresh orange that is 4-directionally adjacent to a rotten orange becomes rotten. Return the minimum number of minutes that must elapse until no cell has a fresh orange."
+            },
+            {
+                title: "Maximum Product Subarray", difficulty: "Medium", patternId: "dynamic-programming", url: "https://leetcode.com/problems/maximum-product-subarray/",
+                clues: "Similar to Kadane's algorithm, but a negative number can instantly turn a large negative product into a massive positive one. We must track BOTH the running max and running min.",
+                description: "Given an integer array nums, find a subarray that has the largest product, and return the product."
+            },
+            {
+                title: "Longest Increasing Subsequence", difficulty: "Medium", patternId: "dynamic-programming", url: "https://leetcode.com/problems/longest-increasing-subsequence/",
+                clues: "Can be solved with DP by checking all previous elements to build the longest sequence ending at 'i'. (Can also be optimized to O(n log n) with Binary Search).",
+                description: "Given an integer array nums, return the length of the longest strictly increasing subsequence."
+            },
+            {
+                title: "Squares of a Sorted Array", difficulty: "Easy", patternId: "two-pointers", url: "https://leetcode.com/problems/squares-of-a-sorted-array/",
+                clues: "The largest squared values will come from the extreme ends of the array (either large positive or large negative). Set pointers at both ends and build the result array backwards.",
+                description: "Given an integer array nums sorted in non-decreasing order, return an array of the squares of each number sorted in non-decreasing order."
+            },
+            {
+                title: "Find Peak Element", difficulty: "Medium", patternId: "modified-binary-search", url: "https://leetcode.com/problems/find-peak-element/",
+                clues: "We need an O(log n) solution for an unsorted array. If mid is smaller than its right neighbor, we are on an upward slope, meaning a peak MUST exist to the right.",
+                description: "A peak element is an element that is strictly greater than its neighbors. Given a 0-indexed integer array nums, find a peak element, and return its index."
+            },
+            {
+                title: "Kth Largest Element in a Stream", difficulty: "Easy", patternId: "top-k-elements", url: "https://leetcode.com/problems/kth-largest-element-in-a-stream/",
+                clues: "Continuous data requires dynamic ordering. Keep a Min-Heap of size K. The smallest element in this heap (the root) is always the Kth largest element overall.",
+                description: "Design a class to find the kth largest element in a stream. Note that it is the kth largest element in the sorted order, not the kth distinct element."
+            },
+            {
+                title: "Palindromic Substrings", difficulty: "Medium", patternId: "two-pointers", url: "https://leetcode.com/problems/palindromic-substrings/",
+                clues: "Instead of checking every substring, treat every single character (and every pair of identical characters) as a potential center of a palindrome, and use two pointers to expand outwards.",
+                description: "Given a string s, return the number of palindromic substrings in it."
+            },
+
+            {
+                title: "Valid Palindrome", difficulty: "Easy", patternId: "two-pointers", url: "https://leetcode.com/problems/valid-palindrome/",
+                clues: "Compare characters from the outside in. One pointer starts at the beginning, the other at the end, moving inward while skipping non-alphanumeric characters.",
+                description: "A phrase is a palindrome if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward."
+            },
+            {
+                title: "Permutation in String", difficulty: "Medium", patternId: "sliding-window", url: "https://leetcode.com/problems/permutation-in-string/",
+                clues: "A permutation means the character frequencies must match exactly. Maintain a fixed-size sliding window of s1's length across s2 and compare frequency arrays/maps.",
+                description: "Given two strings s1 and s2, return true if s2 contains a permutation of s1, or false otherwise."
+            },
+            {
+                title: "Palindrome Linked List", difficulty: "Easy", patternId: "fast-slow-pointers", url: "https://leetcode.com/problems/palindrome-linked-list/",
+                clues: "Use fast and slow pointers to find the middle of the linked list, reverse the second half in-place, and then compare the two halves.",
+                description: "Given the head of a singly linked list, return true if it is a palindrome or false otherwise."
+            },
+            {
+                title: "Non-overlapping Intervals", difficulty: "Medium", patternId: "merge-intervals", url: "https://leetcode.com/problems/non-overlapping-intervals/",
+                clues: "Sort intervals by their end times. Iteratively keep the interval that ends earliest to maximize the space for subsequent intervals, counting the ones you must remove.",
+                description: "Given an array of intervals intervals where intervals[i] = [starti, endi], return the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping."
+            },
+            {
+                title: "First Missing Positive", difficulty: "Hard", patternId: "cyclic-sort", url: "https://leetcode.com/problems/first-missing-positive/",
+                clues: "Since we are looking for the first missing positive, the answer must be between 1 and n+1. We can cyclically swap elements into their correct 0-indexed positions (where nums[i] == i + 1).",
+                description: "Given an unsorted integer array nums. Return the smallest positive integer that is not present in nums. You must implement an algorithm that runs in O(n) time and uses O(1) auxiliary space."
+            },
+            {
+                title: "Reverse Linked List II", difficulty: "Medium", patternId: "inplace-reversal-ll", url: "https://leetcode.com/problems/reverse-linked-list-ii/",
+                clues: "Traverse to the 'left' boundary, keep a reference to the node just before it, and then perform the standard in-place reversal only for the specified sub-list before reconnecting.",
+                description: "Given the head of a singly linked list and two integers left and right where left <= right, reverse the nodes of the list from position left to position right, and return the reversed list."
+            },
+            {
+                title: "Binary Tree Zigzag Level Order Traversal", difficulty: "Medium", patternId: "tree-bfs", url: "https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/",
+                clues: "Standard BFS using a queue, but keep a boolean flag to alternate the insertion order (append vs. prepend) of the current level's values into the result list.",
+                description: "Given the root of a binary tree, return the zigzag level order traversal of its nodes' values. (i.e., from left to right, then right to left for the next level and alternate between)."
+            },
+            {
+                title: "Maximum Depth of Binary Tree", difficulty: "Easy", patternId: "tree-dfs", url: "https://leetcode.com/problems/maximum-depth-of-binary-tree/",
+                clues: "Recursively calculate the depth of the left subtree and the right subtree. The max depth at any node is 1 + max(left_depth, right_depth).",
+                description: "Given the root of a binary tree, return its maximum depth. A binary tree's maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node."
+            },
+            {
+                title: "Sliding Window Median", difficulty: "Hard", patternId: "two-heaps", url: "https://leetcode.com/problems/sliding-window-median/",
+                clues: "Maintains a sliding window of size k. Use a Max-Heap for the smaller half and a Min-Heap for the larger half. Must handle efficient removal of elements falling out of the window.",
+                description: "The median is the middle value in an ordered integer list. Given an integer array nums and an integer k, return the median array for each window in the original array."
+            },
+            {
+                title: "Letter Combinations of a Phone Number", difficulty: "Medium", patternId: "subsets", url: "https://leetcode.com/problems/letter-combinations-of-a-phone-number/",
+                clues: "Map each digit to its letters. Use backtracking to build combinations character by character, moving to the next digit in the string at each recursive step.",
+                description: "Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could represent. Return the answer in any order."
+            },
+            {
+                title: "Search a 2D Matrix", difficulty: "Medium", patternId: "modified-binary-search", url: "https://leetcode.com/problems/search-a-2d-matrix/",
+                clues: "Treat the 2D matrix as a flattened 1D sorted array. Map the 1D midpoint index back to 2D coordinates (row = mid / cols, col = mid % cols) to perform standard binary search.",
+                description: "You are given an m x n integer matrix matrix with the following two properties: Each row is sorted in non-decreasing order. The first integer of each row is greater than the last integer of the previous row. Given an integer target, return true if target is in matrix."
+            },
+            {
+                title: "Minimum Height Trees", difficulty: "Medium", patternId: "topological-sort", url: "https://leetcode.com/problems/minimum-height-trees/",
+                clues: "Think of finding the center(s) of a graph. Iteratively peel away the leaf nodes (nodes with degree 1) using a queue until only 1 or 2 core nodes are left.",
+                description: "A tree is an undirected graph in which any two vertices are connected by exactly one path. Given a tree of n nodes, find all the minimum height trees and return a list of their root labels."
+            },
+            {
+                title: "Decode Ways", difficulty: "Medium", patternId: "dynamic-programming", url: "https://leetcode.com/problems/decode-ways/",
+                clues: "At each digit, you can either decode it as a single character (if > 0) or as a two-digit character (if between 10 and 26). dp[i] = dp[i-1] + dp[i-2].",
+                description: "A message containing letters from A-Z can be encoded into numbers using the mapping 'A' -> '1', 'B' -> '2', ..., 'Z' -> '26'. Given a string s containing only digits, return the number of ways to decode it."
+            },
+            {
+                title: "Single Number III", difficulty: "Medium", patternId: "bitwise-xor", url: "https://leetcode.com/problems/single-number-iii/",
+                clues: "XOR all numbers to get the XOR of the two unique numbers. Find any set bit in this result to partition the array into two groups, then XOR each group to isolate the unique numbers.",
+                description: "Given an integer array nums, in which exactly two elements appear only once and all the other elements appear exactly twice. Find the two elements that appear only once."
+            },
+            {
+                title: "Clone Graph", difficulty: "Medium", patternId: "graph-traversal", url: "https://leetcode.com/problems/clone-graph/",
+                clues: "Use DFS or BFS to traverse the graph. Keep a hash map to map original nodes to their cloned counterparts to handle cycles and avoid infinite loops.",
+                description: "Given a reference of a node in a connected undirected graph. Return a deep copy (clone) of the graph."
+            },
+            {
+                title: "Largest Rectangle in Histogram", difficulty: "Hard", patternId: "monotonic-stack", url: "https://leetcode.com/problems/largest-rectangle-in-histogram/",
+                clues: "Maintain a strictly increasing stack of indices. When a shorter bar is encountered, pop from the stack to calculate the area of the rectangles that can no longer be extended.",
+                description: "Given an array of integers heights representing the histogram's bar height where the width of each bar is 1, return the area of the largest rectangle in the histogram."
+            },
+            {
+                title: "Word Search II", difficulty: "Hard", patternId: "trie", url: "https://leetcode.com/problems/word-search-ii/",
+                clues: "Running DFS for every single word is too slow. Build a Trie out of all the words to search for, then run a single back-tracking DFS on the board to find matches simultaneously.",
+                description: "Given an m x n board of characters and a list of strings words, return all words on the board."
+            },
+            {
+                title: "Kth Smallest Element in a Sorted Matrix", difficulty: "Medium", patternId: "k-way-merge", url: "https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/",
+                clues: "Similar to merging k sorted lists. Push the first element of each row into a Min-Heap. Pop the smallest, and push the next element from that same row into the heap, repeating k times.",
+                description: "Given an n x n matrix where each of the rows and columns is sorted in ascending order, return the kth smallest element in the matrix."
+            },
+            {
+                title: "Sort Characters By Frequency", difficulty: "Medium", patternId: "top-k-elements", url: "https://leetcode.com/problems/sort-characters-by-frequency/",
+                clues: "Count frequencies using a map. Then, either use a Max-Heap based on frequency or Bucket Sort (where index is frequency) to construct the final string.",
+                description: "Given a string s, sort it in decreasing order based on the frequency of the characters. The frequency of a character is the number of times it appears in the string."
+            },
+            {
+                title: "Evaluate Reverse Polish Notation", difficulty: "Medium", patternId: "stack", url: "https://leetcode.com/problems/evaluate-reverse-polish-notation/",
+                clues: "Push numbers onto a stack. Whenever an operator is encountered, pop the top two numbers, apply the operation, and push the result back onto the stack.",
+                description: "You are given an array of strings tokens that represents an arithmetic expression in a Reverse Polish Notation. Evaluate the expression. Return an integer that represents the value of the expression."
+            }
+
+        ];
+
+        // --- 2. GAME STATE & LOGIC ---
+        let unplayedQuestions = [];
+        let currentQuestion = null;
+
+        let correctCount = 0;
+        let missedCount = 0;
+
+        let timerInterval = null;
+        let timeRemaining = 0;
+        let isGameActive = false;
+
+        // Populate Cheat Sheet on load
+        function initCheatSheet() {
+            const list = document.getElementById('cheat-sheet-list');
+            Object.values(patternsMap).forEach(patternName => {
+                const li = document.createElement('li');
+                li.className = "py-1 border-b border-gray-800 last:border-0";
+                li.innerText = patternName;
+                list.appendChild(li);
+            });
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Pulls a random question that hasn't been played yet
+        function nextQuestion() {
+            if (unplayedQuestions.length === 0) {
+                // Refill and shuffle if they play through all of them
+                unplayedQuestions = [...questionsData];
+                shuffleArray(unplayedQuestions);
+            }
+
+            currentQuestion = unplayedQuestions.pop();
+
+            // UI Updates
+            document.getElementById('q-title').innerText = currentQuestion.title;
+            document.getElementById('q-description').innerText = currentQuestion.description;
+
+            const diffEl = document.getElementById('q-difficulty');
+            diffEl.innerText = currentQuestion.difficulty;
+            // Set Badge color based on difficulty
+            diffEl.className = "px-3 py-1 text-xs font-bold rounded-full uppercase tracking-wider ";
+            if (currentQuestion.difficulty === "Easy") diffEl.className += "bg-green-100 text-green-700";
+            else if (currentQuestion.difficulty === "Medium") diffEl.className += "bg-yellow-100 text-yellow-700";
+            else diffEl.className += "bg-red-100 text-red-700";
+
+            // Reset UI States
+            document.getElementById('reveal-btn').classList.remove('hidden');
+            document.getElementById('reveal-section').classList.add('hidden');
+            document.getElementById('reveal-section').classList.remove('flex');
+        }
+
+        // Shows the answer
+        function revealAnswer() {
+            document.getElementById('reveal-btn').classList.add('hidden');
+            document.getElementById('reveal-section').classList.remove('hidden');
+            document.getElementById('reveal-section').classList.add('flex');
+
+            document.getElementById('r-pattern').innerText = patternsMap[currentQuestion.patternId];
+            document.getElementById('r-clues').innerText = currentQuestion.clues;
+            document.getElementById('r-link').href = currentQuestion.url;
+        }
+
+        // Records the score and moves to next
+        function recordAnswer(isCorrect) {
+            if (!isGameActive) return; // Prevent scoring if timer ran out
+
+            if (isCorrect) {
+                correctCount++;
+                document.getElementById('score-correct').innerText = correctCount;
+            } else {
+                missedCount++;
+                document.getElementById('score-missed').innerText = missedCount;
+            }
+            nextQuestion();
+        }
+
+        // --- 3. TIMER LOGIC ---
+        function startTimer(minutes) {
+            clearInterval(timerInterval);
+
+            // Reset Game
+            correctCount = 0;
+            missedCount = 0;
+            document.getElementById('score-correct').innerText = "0";
+            document.getElementById('score-missed').innerText = "0";
+
+            document.getElementById('app-container').classList.remove('hidden');
+            document.getElementById('end-screen').classList.add('hidden');
+
+            timeRemaining = minutes * 60;
+            isGameActive = true;
+            updateTimerDisplay();
+
+            unplayedQuestions = [...questionsData];
+            shuffleArray(unplayedQuestions);
+            nextQuestion();
+
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+
+                if (timeRemaining <= 0) {
+                    endSession();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const m = Math.floor(timeRemaining / 60).toString().padStart(2, '0');
+            const s = (timeRemaining % 60).toString().padStart(2, '0');
+            const display = document.getElementById('timer-display');
+            display.innerText = `${m}:${s}`;
+
+            if (timeRemaining < 60 && timeRemaining > 0) {
+                display.classList.add('text-red-500');
+                display.classList.remove('text-gray-400');
+            } else {
+                display.classList.add('text-gray-400');
+                display.classList.remove('text-red-500');
+            }
+        }
+
+        function endSession() {
+            clearInterval(timerInterval);
+            isGameActive = false;
+            document.getElementById('timer-display').innerText = "00:00";
+
+            // Hide main app, show end screen
+            document.getElementById('app-container').classList.add('hidden');
+            const endScreen = document.getElementById('end-screen');
+            endScreen.classList.remove('hidden');
+
+            document.getElementById('final-correct').innerText = correctCount;
+            document.getElementById('final-missed').innerText = missedCount;
+        }
+
+        // Initialize on load
+        window.onload = () => {
+            initCheatSheet();
+            // Start default practice mode (no timer constraint initially, or start 5m)
+            unplayedQuestions = [...questionsData];
+            shuffleArray(unplayedQuestions);
+            isGameActive = true; // allow scoring without timer for freeplay
+            nextQuestion();
+        };
+    </script>
+</body>
+
+</html>

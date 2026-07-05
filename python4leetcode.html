@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python LeetCode Syntax Recall</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Hide scrollbar for clean sidebar */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="h-screen bg-gray-50 text-gray-800 font-sans overflow-hidden flex flex-col selection:bg-indigo-100 selection:text-indigo-900">
+
+    <div class="bg-white border-b border-gray-100 px-6 py-4 flex justify-between items-center shrink-0 shadow-sm z-50 sticky top-0">
+        <h1 class="font-bold text-xl text-gray-700 flex items-center gap-2">
+            <span>📚</span>
+            <a href="index.html" class="hover:text-indigo-500 transition-colors">LC Study Hub</a>
+        </h1>
+        <div class="flex gap-5 text-sm font-semibold text-gray-500 items-center">
+            <a href="patterns.html" class="hover:text-indigo-500 transition-colors">Pattern Practice</a>
+            <a href="python4leetcode.html" aria-current="page" class="text-indigo-700 bg-indigo-100 px-3 py-1 rounded-full">Python Syntax</a>
+            <a href="recognition.html" class="hover:text-indigo-500 transition-colors">Pattern Recognition</a>
+        </div>
+    </div>
+
+    <div class="flex flex-1 min-h-0 overflow-hidden">
+
+    <div class="w-72 bg-white border-r border-gray-200 flex flex-col h-full shadow-sm z-10 shrink-0">
+        <div class="p-4 border-b border-gray-200 font-bold text-lg text-gray-700">
+            Syntax Categories
+        </div>
+        <div id="sidebar-list" class="flex-1 overflow-y-auto p-2 space-y-1 no-scrollbar">
+            </div>
+        <div class="p-4 border-t border-gray-200 bg-gray-50" id="sidebar-stats">
+            <div class="flex justify-between text-sm font-bold">
+                <span class="text-green-600">✅ <span id="score-correct">0</span></span>
+                <span class="text-red-500">❌ <span id="score-missed">0</span></span>
+            </div>
+            <div class="text-xs text-gray-500 text-center mt-2" id="cards-remaining">0 cards left</div>
+        </div>
+    </div>
+
+    <div class="flex-1 flex flex-col h-full overflow-hidden relative">
+        
+        <div class="border-b border-gray-200 bg-white px-8 py-4 flex justify-between items-center shrink-0 shadow-sm z-10">
+            <h1 id="category-title" class="text-2xl font-bold text-gray-800">All Categories</h1>
+            
+            <div class="flex items-center gap-4">
+                <div class="flex bg-gray-100 p-1 rounded-lg border border-gray-200">
+                    <button id="btn-mode-quiz" onclick="setMode('quiz')" class="px-4 py-1.5 text-sm font-bold rounded-md transition-colors bg-white shadow-sm text-indigo-700">
+                        Active Recall
+                    </button>
+                    <button id="btn-mode-study" onclick="setMode('study')" class="px-4 py-1.5 text-sm font-bold rounded-md transition-colors text-gray-500 hover:text-gray-700">
+                        Study List
+                    </button>
+                </div>
+                
+                <div class="w-px h-6 bg-gray-300"></div>
+                
+                <button onclick="resetDeck()" class="px-4 py-2 bg-gray-800 hover:bg-gray-900 text-white text-sm font-bold rounded-md transition-colors shadow-sm">
+                    Reset Deck
+                </button>
+            </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-6">
+            
+            <div id="flashcard-container" class="max-w-4xl w-full mx-auto flex flex-col gap-6">
+                
+                <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-200">
+                    <span id="card-tag" class="inline-block px-3 py-1 bg-indigo-100 text-indigo-700 text-xs font-bold rounded-full uppercase tracking-wider mb-4"></span>
+                    <h2 id="question-text" class="text-xl text-gray-800 font-medium leading-relaxed"></h2>
+                </div>
+
+                <div id="input-section" class="flex flex-col gap-4">
+                    <div class="relative">
+                        <div class="absolute top-0 left-0 bg-gray-200 px-4 py-1 text-xs font-bold text-gray-600 rounded-tl-md rounded-br-md uppercase tracking-wider z-10">Your Answer</div>
+                        <textarea id="user-input" rows="4" class="w-full pt-8 pb-4 px-4 bg-white border border-gray-300 rounded-md shadow-sm font-mono text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow resize-none" placeholder="Type the python syntax here..."></textarea>
+                    </div>
+                    
+                    <button id="reveal-btn" onclick="revealAnswer()" class="w-full py-4 bg-indigo-600 text-white font-bold text-lg rounded-xl hover:bg-indigo-700 transition-colors shadow-sm">
+                        Reveal Answer
+                    </button>
+                </div>
+
+                <div id="reveal-section" class="hidden flex-col gap-6">
+                    
+                    <div class="bg-gray-900 border border-gray-700 p-6 rounded-xl shadow-inner relative mt-2">
+                        <div class="absolute top-0 left-0 bg-green-600 px-4 py-1 text-xs font-bold text-white rounded-tl-xl rounded-br-md uppercase tracking-wider">Correct Syntax</div>
+                        <pre id="correct-answer" class="text-green-400 font-mono text-base whitespace-pre-wrap mt-4"></pre>
+                    </div>
+
+                    <div class="bg-blue-50 border border-blue-200 p-6 rounded-xl text-center shadow-sm">
+                        <h3 class="text-gray-700 font-bold mb-4">Did you get it right?</h3>
+                        <div class="flex gap-4">
+                            <button onclick="gradeCard(false)" class="flex-1 py-3 bg-red-100 text-red-700 hover:bg-red-200 border border-red-300 font-bold rounded-xl transition-colors">
+                                Missed It 👎
+                            </button>
+                            <button onclick="gradeCard(true)" class="flex-1 py-3 bg-green-500 text-white hover:bg-green-600 font-bold rounded-xl transition-colors shadow-sm">
+                                Got It 👍
+                            </button>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-3">Missed cards go back into the queue for active recall.</p>
+                    </div>
+                </div>
+
+                <div id="empty-state" class="hidden bg-white p-12 rounded-xl shadow-sm border border-gray-200 text-center flex-1 flex-col items-center justify-center">
+                    <div class="text-6xl mb-4">🎉</div>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2">Deck Completed!</h2>
+                    <p class="text-gray-600">You've successfully recalled all the syntax in this category.</p>
+                </div>
+            </div>
+
+            <div id="study-container" class="hidden max-w-4xl w-full mx-auto flex-col gap-6 pb-12">
+                </div>
+
+        </div>
+    </div>
+
+    </div>
+
+    <script>
+        // The complete array of 52 Python syntax rules
+        const flashcardsData = [
+            { category: "Lists", q: "Syntax to add an element `x` to the end of a list `lst`?", a: "lst.append(x)" },
+            { category: "Lists", q: "Syntax to remove and return the last element of a list `lst`?", a: "lst.pop()" },
+            { category: "Lists", q: "Syntax to remove and return the first element of a list `lst`?", a: "lst.pop(0)" },
+            { category: "Lists", q: "Syntax to insert an element `x` at a specific `index` in a list `lst`?", a: "lst.insert(index, x)" },
+            { category: "Lists", q: "Syntax to sort a list `lst` in-place in ascending order?", a: "lst.sort()" },
+            { category: "Lists", q: "Syntax to sort a list `lst` in-place in descending order?", a: "lst.sort(reverse=True)" },
+            { category: "Lists", q: "Syntax to create a new sorted list from an iterable without modifying the original?", a: "sorted(iterable)" },
+            
+            { category: "Strings", q: "Syntax to efficiently concatenate a list of strings `lst` into a single string?", a: '"".join(lst)' },
+            { category: "Strings", q: "Syntax to split a string `s` into a list based on a `delimiter`?", a: "s.split(delimiter)" },
+            { category: "Strings", q: "Syntax to check if a string `s` contains only letters, only digits, or only alphanumeric characters?", a: "s.isalpha()\ns.isdigit()\ns.isalnum()" },
+            { category: "Strings", q: "Syntax to convert a string `s` to all lowercase or all uppercase?", a: "s.lower()\ns.upper()" },
+            { category: "Strings", q: "Syntax to get the ASCII integer value of a character `c`?", a: "ord(c)" },
+            { category: "Strings", q: "Syntax to convert an ASCII integer `n` back to a character?", a: "chr(n)" },
+            
+            { category: "Dictionaries", q: "Syntax to safely retrieve the value of `key` from dictionary `d`, returning `default` if the key doesn't exist?", a: "d.get(key, default)" },
+            { category: "Dictionaries", q: "Syntax to iterate through both keys and values of a dictionary `d` simultaneously?", a: "for k, v in d.items():" },
+            { category: "Dictionaries", q: "Syntax to get an iterable of just the keys or just the values from a dictionary `d`?", a: "d.keys()\nd.values()" },
+            { category: "Dictionaries", q: "Syntax to remove a specific `key` from a dictionary `d` in-place?", a: "del d[key]" },
+            
+            { category: "Sets", q: "Syntax to add an element `x` to a set `s`?", a: "s.add(x)" },
+            { category: "Sets", q: "Syntax to remove an element `x` from a set `s` (raises an error if not found)?", a: "s.remove(x)" },
+            { category: "Sets", q: "Syntax to safely remove an element `x` from a set `s` (does nothing if not found)?", a: "s.discard(x)" },
+            { category: "Sets", q: "Syntax for set intersection, union, and difference between `set1` and `set2`?", a: "Intersection: set1 & set2\nUnion: set1 | set2\nDifference: set1 - set2" },
+            
+            { category: "Collections", q: "Syntax to initialize a double-ended queue (deque)?", a: "from collections import deque\nq = deque()" },
+            { category: "Collections", q: "Syntax to add an element `x` to the right side and pop from the left side of a deque `q`?", a: "q.append(x)\nq.popleft()" },
+            { category: "Collections", q: "Syntax to initialize a dictionary that defaults missing keys to `0` or an empty list?", a: "from collections import defaultdict\nd = defaultdict(int)\nd = defaultdict(list)" },
+            { category: "Collections", q: "Syntax to create a frequency map/count of elements in an iterable?", a: "from collections import Counter\nc = Counter(iterable)" },
+            { category: "Collections", q: "Syntax to get the `k` most frequent elements from a Counter object `c`?", a: "c.most_common(k)" },
+            
+            { category: "Heapq", q: "Syntax to transform an existing list `lst` into a min-heap in-place?", a: "import heapq\nheapq.heapify(lst)" },
+            { category: "Heapq", q: "Syntax to push an `item` onto a `heap`?", a: "heapq.heappush(heap, item)" },
+            { category: "Heapq", q: "Syntax to pop the smallest item from a `heap`?", a: "heapq.heappop(heap)" },
+            { category: "Heapq", q: "How do you implement a max-heap for integers since Python only has min-heaps by default?", a: "Multiply values by -1 before pushing, and multiply the popped values by -1 to restore them." },
+            
+            { category: "Bisect", q: "Syntax to find the first index where `x` can be inserted in a sorted array `arr` to maintain sorted order (lower bound)?", a: "import bisect\nbisect.bisect_left(arr, x)" },
+            { category: "Bisect", q: "Syntax to find the last index where `x` can be inserted in a sorted array `arr` to maintain sorted order (upper bound)?", a: "bisect.bisect_right(arr, x)" },
+            
+            { category: "Math", q: "Syntax to represent positive and negative infinity?", a: "import math\nmath.inf, -math.inf" },
+            { category: "Math", q: "Syntax to find the greatest common divisor of `a` and `b`?", a: "math.gcd(a, b)" },
+            { category: "Math", q: "Syntax to perform floor division vs. truncating division towards zero for `a` divided by `b`?", a: "Floor division: a // b\nTruncate towards zero: int(a / b)" },
+            
+            { category: "Utility", q: "Syntax to iterate over an `iterable` while keeping track of the `index`?", a: "for index, item in enumerate(iterable):" },
+            { category: "Utility", q: "Syntax to iterate through `list1` and `list2` in parallel?", a: "for a, b in zip(list1, list2):" },
+            { category: "Utility", q: "Syntax to loop backwards starting from `start` down to (and including) `0`?", a: "for i in range(start, -1, -1):" },
+            { category: "Utility", q: "Syntax to iterate backward through an `iterable` without modifying the original structure?", a: "for item in reversed(iterable):" },
+            { category: "Utility", q: "Syntax to find the minimum, maximum, sum, and absolute value?", a: "min(x)\nmax(x)\nsum(iterable)\nabs(x)" },
+            { category: "Utility", q: "Syntax to return `True` if *any* element in an iterable is true?", a: "any(iterable)" },
+            { category: "Utility", q: "Syntax to return `True` if *all* elements in an iterable are true?", a: "all(iterable)" },
+            { category: "Utility", q: "Syntax to automatically memoize a recursive function?", a: "from functools import cache\n@cache" },
+            { category: "Utility", q: "Syntax to convert a mutable list `lst` into an immutable, hashable type (for sets/dict keys)?", a: "tuple(lst)" },
+            
+            { category: "Slicing/Idioms", q: "Syntax to quickly reverse a list or string `arr` using slicing?", a: "arr[::-1]" },
+            { category: "Slicing/Idioms", q: "Syntax to rotate an array `arr` so the first `k` elements are moved to the back?", a: "arr[k:] + arr[:k]" },
+            { category: "Slicing/Idioms", q: "Syntax for a list comprehension that generates the squares of numbers 0 through 9?", a: "[x**2 for x in range(10)]" },
+            { category: "Slicing/Idioms", q: "Syntax to initialize a 2D array (matrix) of size `rows` x `cols` filled with zeros?", a: "[[0] * cols for _ in range(rows)]" },
+            { category: "Slicing/Idioms", q: "Syntax for a set comprehension that generates squared values of unique items in `nums`?", a: "{x**2 for x in nums}" },
+            { category: "Slicing/Idioms", q: "Syntax to swap variables `a` and `b` without using a temporary variable?", a: "a, b = b, a" },
+            { category: "Slicing/Idioms", q: "Syntax for a ternary operator that assigns `x` to `val` if a condition is true, otherwise assigns `y`?", a: "val = x if condition else y" },
+            { category: "Slicing/Idioms", q: "Syntax to sort a list of `intervals` (pairs) based on their first element using a lambda function?", a: "intervals.sort(key=lambda x: x[0])" }
+        ];
+
+        // Global State
+        let currentCategory = "All";
+        let activeQueue = [];
+        let currentCard = null;
+        let stats = { correct: 0, missed: 0 };
+        let viewMode = 'quiz'; // 'quiz' or 'study'
+
+        // Utility: Formats backticks into inline code blocks
+        function formatQuestion(text) {
+            return text.replace(/`([^`]+)`/g, '<span class="bg-gray-100 text-red-600 font-mono px-1 py-0.5 rounded text-sm">$1</span>');
+        }
+
+        // Utility: Array shuffler
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Handles switching between active recall and study list
+        function setMode(mode) {
+            viewMode = mode;
+            const btnQuiz = document.getElementById('btn-mode-quiz');
+            const btnStudy = document.getElementById('btn-mode-study');
+            const flashcardContainer = document.getElementById('flashcard-container');
+            const studyContainer = document.getElementById('study-container');
+            const sidebarStats = document.getElementById('sidebar-stats');
+
+            if (mode === 'quiz') {
+                // Update button styles
+                btnQuiz.className = "px-4 py-1.5 text-sm font-bold rounded-md transition-colors bg-white shadow-sm text-indigo-700";
+                btnStudy.className = "px-4 py-1.5 text-sm font-bold rounded-md transition-colors text-gray-500 hover:text-gray-700";
+                
+                // Show/Hide containers
+                flashcardContainer.classList.remove('hidden');
+                flashcardContainer.classList.add('flex');
+                studyContainer.classList.add('hidden');
+                studyContainer.classList.remove('flex');
+                sidebarStats.classList.remove('invisible');
+
+                // Reload the current card state
+                loadNextCard();
+            } else {
+                // Update button styles
+                btnStudy.className = "px-4 py-1.5 text-sm font-bold rounded-md transition-colors bg-white shadow-sm text-indigo-700";
+                btnQuiz.className = "px-4 py-1.5 text-sm font-bold rounded-md transition-colors text-gray-500 hover:text-gray-700";
+                
+                // Show/Hide containers
+                flashcardContainer.classList.add('hidden');
+                flashcardContainer.classList.remove('flex');
+                studyContainer.classList.remove('hidden');
+                studyContainer.classList.add('flex');
+                sidebarStats.classList.add('invisible');
+
+                renderStudyMode();
+            }
+        }
+
+        // Generates the full list of cards for the study view
+        function renderStudyMode() {
+            const container = document.getElementById('study-container');
+            container.innerHTML = '';
+            
+            const cardsToDisplay = currentCategory === "All" 
+                ? flashcardsData 
+                : flashcardsData.filter(c => c.category === currentCategory);
+
+            cardsToDisplay.forEach((card, index) => {
+                const cardDiv = document.createElement('div');
+                cardDiv.className = "bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden";
+                cardDiv.innerHTML = `
+                    <div class="p-6 border-b border-gray-100 flex items-start justify-between gap-4">
+                        <h3 class="text-lg text-gray-800 font-medium">${formatQuestion(card.q)}</h3>
+                        <span class="shrink-0 inline-block px-3 py-1 bg-gray-100 text-gray-600 text-xs font-bold rounded-full uppercase tracking-wider">${card.category}</span>
+                    </div>
+                    <div class="bg-gray-900 p-6 relative">
+                        <div class="absolute top-0 left-0 bg-gray-700 px-3 py-0.5 text-[10px] font-bold text-gray-300 rounded-br-md uppercase tracking-widest">Syntax</div>
+                        <pre class="text-green-400 font-mono text-sm whitespace-pre-wrap mt-2">${card.a}</pre>
+                    </div>
+                `;
+                container.appendChild(cardDiv);
+            });
+        }
+
+        // Populates the category sidebar based on extracted categories
+        function renderSidebar() {
+            const categories = ["All", ...new Set(flashcardsData.map(c => c.category))];
+            const list = document.getElementById('sidebar-list');
+            list.innerHTML = '';
+            
+            categories.forEach(cat => {
+                const count = cat === "All" ? flashcardsData.length : flashcardsData.filter(c => c.category === cat).length;
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left px-4 py-3 rounded-md text-sm transition-colors flex justify-between items-center ${
+                    cat === currentCategory 
+                        ? 'bg-indigo-100 text-indigo-800 font-bold border-l-4 border-indigo-600' 
+                        : 'text-gray-600 hover:bg-gray-100 border-l-4 border-transparent'
+                }`;
+                btn.innerHTML = `<span>${cat}</span> <span class="bg-gray-200 text-gray-600 text-xs px-2 py-0.5 rounded-full">${count}</span>`;
+                btn.onclick = () => selectCategory(cat);
+                list.appendChild(btn);
+            });
+        }
+
+        // Handles sidebar clicks
+        function selectCategory(category) {
+            currentCategory = category;
+            document.getElementById('category-title').innerText = category === "All" ? "All Categories" : category;
+            
+            resetDeck();
+            renderSidebar();
+            
+            // If we are in study mode, immediately re-render the list
+            if (viewMode === 'study') {
+                renderStudyMode();
+            }
+        }
+
+        // Rebuilds the active recall queue and resets stats
+        function resetDeck() {
+            activeQueue = currentCategory === "All" 
+                ? [...flashcardsData] 
+                : flashcardsData.filter(c => c.category === currentCategory);
+            
+            shuffleArray(activeQueue);
+            
+            stats = { correct: 0, missed: 0 };
+            updateStatsUI();
+            
+            if (viewMode === 'quiz') {
+                loadNextCard();
+            }
+        }
+
+        // UI Logic for the active recall flashcards
+        function loadNextCard() {
+            document.getElementById('cards-remaining').innerText = `${activeQueue.length} cards left in queue`;
+
+            if (activeQueue.length === 0) {
+                document.getElementById('input-section').classList.add('hidden');
+                document.getElementById('reveal-section').classList.add('hidden');
+                document.getElementById('flashcard-container').children[0].classList.add('hidden');
+                document.getElementById('empty-state').classList.remove('hidden');
+                document.getElementById('empty-state').classList.add('flex');
+                return;
+            }
+
+            document.getElementById('empty-state').classList.add('hidden');
+            document.getElementById('empty-state').classList.remove('flex');
+            document.getElementById('flashcard-container').children[0].classList.remove('hidden');
+
+            currentCard = activeQueue.shift();
+
+            document.getElementById('card-tag').innerText = currentCard.category;
+            document.getElementById('question-text').innerHTML = formatQuestion(currentCard.q);
+            document.getElementById('correct-answer').innerText = currentCard.a;
+            
+            const userInput = document.getElementById('user-input');
+            userInput.value = "";
+            userInput.disabled = false;
+            
+            // Only focus if we are actively in the quiz view
+            if (viewMode === 'quiz') userInput.focus();
+
+            document.getElementById('input-section').classList.remove('hidden');
+            document.getElementById('reveal-btn').classList.remove('hidden');
+            document.getElementById('reveal-section').classList.add('hidden');
+            document.getElementById('reveal-section').classList.remove('flex');
+        }
+
+        function revealAnswer() {
+            document.getElementById('user-input').disabled = true;
+            document.getElementById('reveal-btn').classList.add('hidden');
+            
+            const revealSection = document.getElementById('reveal-section');
+            revealSection.classList.remove('hidden');
+            revealSection.classList.add('flex');
+        }
+
+        function gradeCard(isCorrect) {
+            if (isCorrect) {
+                stats.correct++;
+            } else {
+                stats.missed++;
+                activeQueue.push(currentCard); // Re-queue missed cards
+            }
+            updateStatsUI();
+            loadNextCard();
+        }
+
+        function updateStatsUI() {
+            document.getElementById('score-correct').innerText = stats.correct;
+            document.getElementById('score-missed').innerText = stats.missed;
+        }
+
+        // Hotkeys for revealing
+        document.getElementById('user-input').addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                revealAnswer();
+            }
+        });
+
+        // Init
+        window.onload = () => {
+            renderSidebar();
+            resetDeck();
+        };
+    </script>
+</body>
+</html>
