@@ -6,7 +6,7 @@ A collection of web-based tools designed to apply science-backed learning method
 
 I built this mini-project to solve my own problem. I realized that reading through LeetCode solutions isn't the best way to *remember* them. Re-reading your notes or writing down answers while staring at open solutions is mostly a waste of time because you aren't forcing your brain to do the work.
 
-I completely vibe-coded this with AI to see how far I could take it. It’s not meant to be a showcase of my development skills, but rather a practical way to solve a real problem I was facing in my own studies.
+I mostly vibe-coded this with AI to see how far I could take it. It's not meant to be a showcase of my development skills, but rather an exercise of identifying an issue and choosing the right tool to quickly implement a solution.
 
 ## The Tools
 
