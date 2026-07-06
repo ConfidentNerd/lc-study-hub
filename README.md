@@ -2,6 +2,8 @@
 
 A collection of web-based tools designed to apply science-backed learning methods—specifically Active Recall—to technical interview preparation. 
 
+**Use the app:** https://confidentnerd.github.io/lc-study-hub/
+
 ## Motivation
 
 I built this mini-project to solve my own problem. I realized that reading through LeetCode solutions isn't the best way to *remember* them. Re-reading your notes or writing down answers while staring at open solutions is mostly a waste of time because you aren't forcing your brain to do the work.
@@ -24,7 +26,14 @@ I mostly vibe-coded this with AI to see how far I could take it. It's not meant 
 
 ## Usage
 
-Clone the repository and open `index.html` in your browser. No build steps or servers are required.
+Visit the website:
+
+https://confidentnerd.github.io/lc-study-hub/
+
+Or, if you'd like to run it locally:
+
+1. Clone the repository.
+2. Open `index.html` in your browser.
 
 ## Author
 
