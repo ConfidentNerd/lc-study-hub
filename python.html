@@ -149,6 +149,8 @@
             { category: "Dictionaries", q: "Syntax to iterate through both keys and values of a dictionary `d` simultaneously?", a: "for k, v in d.items():" },
             { category: "Dictionaries", q: "Syntax to get an iterable of just the keys or just the values from a dictionary `d`?", a: "d.keys()\nd.values()" },
             { category: "Dictionaries", q: "Syntax to remove a specific `key` from a dictionary `d` in-place?", a: "del d[key]" },
+            { category: "Dictionaries", q: "Syntax to remove `key` from dictionary `d` and return its value, or return `default` if the key doesn't exist (avoiding KeyError)?", a: "d.pop(key, default)" },
+            { category: "Dictionaries", q: "Syntax to perform fast set operations (intersection, union, difference) directly on the keys of dictionaries `d1` and `d2`?", a: "Intersection: d1.keys() & d2.keys()\nUnion: d1.keys() | d2.keys()\nDifference: d1.keys() - d2.keys()" },
             
             { category: "Sets", q: "Syntax to add an element `x` to a set `s`?", a: "s.add(x)" },
             { category: "Sets", q: "Syntax to remove an element `x` from a set `s` (raises an error if not found)?", a: "s.remove(x)" },
@@ -166,15 +168,15 @@
             { category: "Heapq", q: "Syntax to pop the smallest item from a `heap`?", a: "heapq.heappop(heap)" },
             { category: "Heapq", q: "How do you implement a max-heap for integers since Python only has min-heaps by default?", a: "Multiply values by -1 before pushing, and multiply the popped values by -1 to restore them." },
             
-            { category: "Bisect", q: "Syntax to find the first index where `x` can be inserted in a sorted array `arr` to maintain sorted order (lower bound)?", a: "import bisect\nbisect.bisect_left(arr, x)" },
-            { category: "Bisect", q: "Syntax to find the last index where `x` can be inserted in a sorted array `arr` to maintain sorted order (upper bound)?", a: "bisect.bisect_right(arr, x)" },
+            { category: "Bisect", q: "Syntax to find the first index where `x` can be inserted in a sorted array `arr` to maintain sorted order (lower bound)?", a: "import bisect\nidx = bisect.bisect_left(arr, x)" },
+            { category: "Bisect", q: "Syntax to find the last index where `x` can be inserted in a sorted array `arr` to maintain sorted order (upper bound)?", a: "idx = bisect.bisect_right(arr, x)" },
             
             { category: "Math", q: "Syntax to represent positive and negative infinity?", a: "import math\nmath.inf, -math.inf" },
             { category: "Math", q: "Syntax to find the greatest common divisor of `a` and `b`?", a: "math.gcd(a, b)" },
             { category: "Math", q: "Syntax to perform floor division vs. truncating division towards zero for `a` divided by `b`?", a: "Floor division: a // b\nTruncate towards zero: int(a / b)" },
             
             { category: "Utility", q: "Syntax to iterate over an `iterable` while keeping track of the `index`?", a: "for index, item in enumerate(iterable):" },
-            { category: "Utility", q: "Syntax to iterate through `list1` and `list2` in parallel?", a: "for a, b in zip(list1, list2):" },
+            { category: "Utility", q: "Syntax to iterate through `list1` and `list2` in parallel? (stops at the end of the shortest iterable.)", a: "for a, b in zip(list1, list2):" },
             { category: "Utility", q: "Syntax to loop backwards starting from `start` down to (and including) `0`?", a: "for i in range(start, -1, -1):" },
             { category: "Utility", q: "Syntax to iterate backward through an `iterable` without modifying the original structure?", a: "for item in reversed(iterable):" },
             { category: "Utility", q: "Syntax to find the minimum, maximum, sum, and absolute value?", a: "min(x)\nmax(x)\nsum(iterable)\nabs(x)" },
@@ -184,13 +186,18 @@
             { category: "Utility", q: "Syntax to convert a mutable list `lst` into an immutable, hashable type (for sets/dict keys)?", a: "tuple(lst)" },
             
             { category: "Slicing/Idioms", q: "Syntax to quickly reverse a list or string `arr` using slicing?", a: "arr[::-1]" },
-            { category: "Slicing/Idioms", q: "Syntax to rotate an array `arr` so the first `k` elements are moved to the back?", a: "arr[k:] + arr[:k]" },
-            { category: "Slicing/Idioms", q: "Syntax for a list comprehension that generates the squares of numbers 0 through 9?", a: "[x**2 for x in range(10)]" },
-            { category: "Slicing/Idioms", q: "Syntax to initialize a 2D array (matrix) of size `rows` x `cols` filled with zeros?", a: "[[0] * cols for _ in range(rows)]" },
-            { category: "Slicing/Idioms", q: "Syntax for a set comprehension that generates squared values of unique items in `nums`?", a: "{x**2 for x in nums}" },
+            { category: "Slicing/Idioms", q: "Syntax to rotate an array `arr` so the first `k` elements are moved to the back?", a: "arr = arr[k:] + arr[:k]" },
             { category: "Slicing/Idioms", q: "Syntax to swap variables `a` and `b` without using a temporary variable?", a: "a, b = b, a" },
             { category: "Slicing/Idioms", q: "Syntax for a ternary operator that assigns `x` to `val` if a condition is true, otherwise assigns `y`?", a: "val = x if condition else y" },
-            { category: "Slicing/Idioms", q: "Syntax to sort a list of `intervals` (pairs) based on their first element using a lambda function?", a: "intervals.sort(key=lambda x: x[0])" }
+            { category: "Slicing/Idioms", q: "Syntax to sort a list of `intervals` (pairs) based on their first element using a lambda function?", a: "intervals.sort(key=lambda x: x[0])" }, 
+            { category: "Slicing/Idioms", q: "What do the three parameters represent in list/string slicing syntax `arr[a:b:c]`?", a: "arr[start:stop:step]" },
+
+            { category: "Comprehensions", q: "Syntax for a list comprehension that generates the squares of numbers 0 through 9?", a: "[x**2 for x in range(10)]" },
+            { category: "Comprehensions", q: "Syntax to initialize a 2D array (matrix) of size `rows` x `cols` filled with zeros?", a: "[[0] * cols for row in range(rows)]" },
+            { category: "Comprehensions", q: "Syntax for a set comprehension that generates squared values of unique items in `nums`?", a: "{x**2 for x in nums}" },
+            { category: "Comprehensions", q: "List comprehension syntax to FILTER an iterable (keeping only items that pass a `condition`)?", a: "[item for item in iterable if condition]" },
+            { category: "Comprehensions", q: "List comprehension syntax to MODIFY every item in an iterable, replacing it with `x` if true, or `y` if false?", a: "[(x if condition else y) for item in iterable]" },
+            { category: "Comprehensions", q: "Syntax for a list comprehension to flatten a 2D `matrix` (list of lists) into a 1D list?", a: "[item for row in matrix for item in row]" }
         ];
 
         // Global State
