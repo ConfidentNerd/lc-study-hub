@@ -79,14 +79,14 @@
   </div>
 
   <script>
-    // The complete array of 17 patterns with corrected code and practice questions
+    // The complete array of 20 patterns with corrected code and practice questions
     const patternsData = [
       {
         id: "two-pointers",
         title: "1. Two Pointers",
         question: "When to use:\n- Searching pairs in a sorted array\n- Comparing elements from both ends\n- Removing duplicates\n\nWhat is the Two Pointers pattern template?",
         template: "def two_pointers(arr):\n    ",
-        solution: `def two_pointers(arr):\n    left, right = 0, len(arr) - 1\n    while left < right:\n        # Process elements at arr[left] and arr[right]\n        if condition_met:\n            # Do something\n            left += 1\n            right -= 1\n        elif need_to_move_left:\n            left += 1\n        else:\n            right -= 1\n    return result`,
+        solution: "def two_pointers(arr):\n    left = 0\n    right = len(arr) - 1\n    \n    while left < right:\n        # process elements at arr[left] and arr[right]\n        \n        if condition_met:\n            left += 1\n            right -= 1\n        elif need_to_move_left:\n            left += 1\n        else:\n            right -= 1",
         practice: ["Valid Palindrome", "3Sum", "Container With Most Water", "Remove Duplicates from Sorted Array", "Trapping Rain Water"]
       },
       {
@@ -94,128 +94,152 @@
         title: "2. Sliding Window",
         question: "When to use:\n- Finding subarrays/substrings meeting conditions\n- Calculating running averages/sums\n\nWhat is the Sliding Window pattern template?",
         template: "def sliding_window(arr):\n    ",
-        solution: `def sliding_window(arr):\n    left = 0\n    window_sum = 0\n    result = 0\n    for right in range(len(arr)):\n        window_sum += arr[right]\n        while condition_not_met:\n            window_sum -= arr[left]\n            left += 1\n        result = max(result, right - left + 1)\n    return result`,
+        solution: "def sliding_window(arr):\n    left = 0\n    # initialize window state variables here\n    \n    for right in range(len(arr)):\n        # add arr[right] to window state\n        \n        while condition_not_met:\n            # remove arr[left] from window state\n            left += 1\n            \n        # update result with current valid window state",
         practice: ["Longest Substring Without Repeating Characters", "Minimum Window Substring", "Longest Repeating Character Replacement", "Maximum Sum Subarray of Size K", "Permutation in String"]
       },
       {
-        id: "fast-slow-pointers",
-        title: "3. Fast and Slow Pointers",
-        question: "When to use:\n- Detecting cycles in a linked list\n- Finding the middle element\n\nWhat is the Fast and Slow Pointers template?",
-        template: "def fast_slow_pointers(head):\n    ",
-        solution: `def fast_slow_pointers(head):\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n        if slow == fast:\n            return True  # Cycle detected\n    return False`,
-        practice: ["Linked List Cycle", "Find the Duplicate Number", "Middle of the Linked List", "Happy Number", "Palindrome Linked List"]
+        id: "prefix-sum",
+        title: "3. Prefix Sum",
+        question: "When to use:\n- Subarray sum queries\n- Finding subarrays with specific conditions\n\nWhat is the Prefix Sum template?",
+        template: "def prefix_sum(nums):\n    ",
+        solution: "def subarray_sum(nums, k):\n    counts = {0: 1} # base case\n    curr_sum = 0\n    result = 0\n    \n    for num in nums:\n        curr_sum += num\n        \n        if curr_sum - k in counts:\n            result += counts[curr_sum - k]\n            \n        counts[curr_sum] = counts.get(curr_sum, 0) + 1\n        \n    return result",
+        practice: ["Subarray Sum Equals K", "Continuous Subarray Sum", "Subarray Sums Divisible by K", "Find Pivot Index", "Product of Array Except Self"]
+      },
+      {
+        id: "modified-binary-search",
+        title: "4. Modified Binary Search",
+        question: "When to use:\n- Searching in a rotated array\n- Finding a peak element\n\nWhat is the Modified Binary Search template?",
+        template: "def binary_search(arr, target):\n    ",
+        solution: "def binary_search(arr, target):\n    left = 0\n    right = len(arr) - 1\n    \n    while left <= right:\n        mid = (left + right) // 2\n        \n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n            \n    return -1 # or left, depending on the problem requirement",
+        practice: ["Search in Rotated Sorted Array", "Find Minimum in Rotated Sorted Array", "Peak Index in a Mountain Array", "Search a 2D Matrix", "Find K Closest Elements"]
       },
       {
         id: "merge-intervals",
-        title: "4. Merge Intervals",
+        title: "5. Merge Intervals",
         question: "When to use:\n- Merging overlapping intervals\n- Finding conflicts in schedules\n\nWhat is the Merge Intervals template?",
         template: "def merge_intervals(intervals):\n    ",
-        solution: `def merge_intervals(intervals):\n    intervals.sort(key=lambda x: x[0])\n    merged = []\n    for interval in intervals:\n        if not merged or merged[-1][1] < interval[0]:\n            merged.append(interval)\n        else:\n            merged[-1][1] = max(merged[-1][1], interval[1])\n    return merged`,
+        solution: "def merge_intervals(intervals):\n    if not intervals:\n        return []\n        \n    intervals.sort(key=lambda x: x[0])\n    merged = [intervals[0]]\n    \n    for interval in intervals[1:]:\n        # if overlapping, merge by updating the end time of the last interval\n        if merged[-1][1] >= interval[0]:\n            merged[-1][1] = max(merged[-1][1], interval[1])\n        else:\n            # no overlap, add as a new interval\n            merged.append(interval)\n            \n    return merged",
         practice: ["Merge Intervals", "Insert Interval", "Non-overlapping Intervals", "Meeting Rooms II", "Employee Free Time"]
       },
       {
-        id: "cyclic-sort",
-        title: "5. Cyclic Sort",
-        question: "When to use:\n- Finding missing numbers\n- Detecting duplicates in a specific range\n\nWhat is the Cyclic Sort template?",
-        template: "def cyclic_sort(nums):\n    ",
-        solution: `def cyclic_sort(nums):\n    i = 0\n    while i < len(nums):\n        correct_pos = nums[i] - 1\n        if nums[i] != nums[correct_pos]:\n            nums[i], nums[correct_pos] = nums[correct_pos], nums[i]\n        else:\n            i += 1\n    return nums`,
-        practice: ["Missing Number", "Find All Numbers Disappeared in an Array", "Find the Duplicate Number", "First Missing Positive", "Kth Missing Positive Number"]
+        id: "fast-slow-pointers",
+        title: "6. Fast and Slow Pointers",
+        question: "When to use:\n- Detecting cycles in a linked list\n- Finding the middle element\n\nWhat is the Fast and Slow Pointers template?",
+        template: "def fast_slow_pointers(head):\n    ",
+        solution: "def fast_slow_pointers(head):\n    slow = head\n    fast = head\n    \n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n        \n        # process nodes here\n        \n        if slow == fast:\n            # cycle detected\n            return True\n            \n    return False",
+        practice: ["Linked List Cycle", "Find the Duplicate Number", "Middle of the Linked List", "Happy Number", "Palindrome Linked List"]
       },
       {
         id: "inplace-reversal-ll",
-        title: "6. In-place Reversal of a Linked List",
+        title: "7. In-place Reversal of a Linked List",
         question: "When to use:\n- Reversing a linked list or its subparts\n\nWhat is the In-place Reversal template?",
         template: "def reverse_linked_list(head):\n    ",
-        solution: `def reverse_linked_list(head):\n    prev = None\n    current = head\n    while current:\n        next_node = current.next\n        current.next = prev\n        prev = current\n        current = next_node\n    return prev`,
+        solution: "def reverse_linked_list(head):\n    prev = None\n    current = head\n    \n    while current:\n        next_node = current.next\n        current.next = prev\n        prev = current\n        current = next_node\n        \n    return prev",
         practice: ["Reverse Linked List", "Reverse Linked List II", "Reverse Nodes in k-Group", "Swap Nodes in Pairs", "Rotate List"]
-      },
-      {
-        id: "tree-bfs",
-        title: "7. Tree Breadth-First Search (BFS)",
-        question: "When to use:\n- Level-order traversal of a tree\n- Finding minimum depth\n\nWhat is the Tree BFS template?",
-        template: "from collections import deque\n\ndef bfs(root):\n    ",
-        solution: "from collections import deque\n\ndef bfs(root):\n    if not root:\n        return\n\n    queue = deque()\n    queue.append(root)\n\n    while queue:\n        level_size = len(queue)\n        \n        # process level-by-level \n        for i in range(level_size):\n            node = queue.popleft()\n\n            # process node here\n            \n            if node.left:\n                queue.append(node.left)\n            if node.right:\n                queue.append(node.right)",
-        practice: ["Binary Tree Level Order Traversal", "Binary Tree Zigzag Level Order Traversal", "Minimum Depth of Binary Tree", "Binary Tree Right Side View", "Average of Levels in Binary Tree"]
       },
       {
         id: "tree-dfs",
         title: "8. Tree Depth-First Search (DFS)",
         question: "When to use:\n- Path sum problems\n- Tree diameter calculation\n\nWhat is the Tree DFS template?",
         template: "def dfs(root):\n    ",
-        solution: `def dfs(root):\n    if not root:\n        return\n    # Process current node\n    dfs(root.left)\n    dfs(root.right)`,
+        solution: "def dfs(root):\n    if not root:\n        return\n        \n    # process node here (pre-order)\n    \n    dfs(root.left)\n    \n    # process node here (in-order)\n    \n    dfs(root.right)\n    \n    # process node here (post-order)",
         practice: ["Path Sum", "Binary Tree Maximum Path Sum", "Diameter of Binary Tree", "Validate Binary Search Tree", "Flatten Binary Tree to Linked List"]
       },
       {
-        id: "two-heaps",
-        title: "9. Two Heaps",
-        question: "When to use:\n- Finding the median in a stream\n- Scheduling problems\n\nWhat is the Two Heaps (Median Finder) template?",
-        template: "import heapq\n\nclass MedianFinder:\n    def __init__(self):\n        ",
-        solution: `import heapq\n\nclass MedianFinder:\n    def __init__(self):\n        self.small = []  # max heap\n        self.large = []  # min heap\n\n    def addNum(self, num: int) -> None:\n        if len(self.small) == len(self.large):\n            heapq.heappush(self.large, -heapq.heappushpop(self.small, -num))\n        else:\n            heapq.heappush(self.small, -heapq.heappushpop(self.large, num))\n\n    def findMedian(self) -> float:\n        if len(self.small) == len(self.large):\n            return (-self.small[0] + self.large[0]) / 2.0\n        else:\n            return float(self.large[0])`,
-        practice: ["Find Median from Data Stream", "Sliding Window Median", "IPO", "Find Right Interval", "Schedule Tasks on Minimum Machines"]
+        id: "tree-bfs",
+        title: "9. Tree Breadth-First Search (BFS)",
+        question: "When to use:\n- Level-order traversal of a tree\n- Finding minimum depth\n\nWhat is the Tree BFS template?",
+        template: "from collections import deque\n\ndef bfs(root):\n    ",
+        solution: "from collections import deque\n\ndef bfs(root):\n    if not root:\n        return\n        \n    queue = deque()\n    queue.append(root)\n    \n    while queue:\n        level_size = len(queue)\n        \n        # process level-by-level\n        for _ in range(level_size):\n            node = queue.popleft()\n            \n            # process node here\n            \n            if node.left:\n                queue.append(node.left)\n            if node.right:\n                queue.append(node.right)",
+        practice: ["Binary Tree Level Order Traversal", "Binary Tree Zigzag Level Order Traversal", "Minimum Depth of Binary Tree", "Binary Tree Right Side View", "Average of Levels in Binary Tree"]
       },
       {
-        id: "subsets",
-        title: "10. Subsets",
-        question: "When to use:\n- Generating all subsets\n- Creating permutations\n\nWhat is the Subsets (Backtracking) template?",
-        template: "def subsets(nums):\n    ",
-        solution: `def subsets(nums):\n    result = []\n    def backtrack(start, current):\n        result.append(current[:])\n        for i in range(start, len(nums)):\n            current.append(nums[i])\n            backtrack(i + 1, current)\n            current.pop()\n    backtrack(0, [])\n    return result`,
-        practice: ["Subsets", "Permutations", "Combination Sum", "Letter Combinations of a Phone Number", "Generate Parentheses"]
-      },
-      {
-        id: "modified-binary-search",
-        title: "11. Modified Binary Search",
-        question: "When to use:\n- Searching in a rotated array\n- Finding a peak element\n\nWhat is the Modified Binary Search template?",
-        template: "def binary_search(arr, target):\n    ",
-        solution: `def binary_search(arr, target):\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = left + (right - left) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1`,
-        practice: ["Search in Rotated Sorted Array", "Find Minimum in Rotated Sorted Array", "Peak Index in a Mountain Array", "Search a 2D Matrix", "Find K Closest Elements"]
-      },
-      {
-        id: "topological-sort",
-        title: "12. Topological Sort",
-        question: "When to use:\n- Course scheduling\n- Build dependencies\n\nWhat is the Topological Sort template?",
-        template: "from collections import defaultdict, deque\n\ndef topological_sort(num_nodes, edges):\n    ",
-        solution: `from collections import defaultdict, deque\n\ndef topological_sort(num_nodes, edges):\n    graph = defaultdict(list)\n    in_degree = [0] * num_nodes\n    for src, dest in edges:\n        graph[src].append(dest)\n        in_degree[dest] += 1\n    \n    queue = deque([node for node in range(num_nodes) if in_degree[node] == 0])\n    result = []\n    \n    while queue:\n        node = queue.popleft()\n        result.append(node)\n        for neighbor in graph[node]:\n            in_degree[neighbor] -= 1\n            if in_degree[neighbor] == 0:\n                queue.append(neighbor)\n    \n    return result if len(result) == num_nodes else []`,
-        practice: ["Course Schedule", "Course Schedule II", "Alien Dictionary", "Minimum Height Trees", "Sequence Reconstruction"]
-      },
-      {
-        id: "dynamic-programming",
-        title: "13. Dynamic Programming",
-        question: "When to use:\n- Optimization problems\n- Counting problems\n\nWhat is the basic Dynamic Programming template?",
-        template: "def dynamic_programming(n):\n    ",
-        solution: `def dynamic_programming(n):\n    dp = [0] * (n + 1)\n    dp[0] = 1\n    dp[1] = 1\n    for i in range(2, n + 1):\n        dp[i] = dp[i-1] + dp[i-2]\n    return dp[n]`,
-        practice: ["Climbing Stairs", "Coin Change", "Longest Increasing Subsequence", "Word Break", "Regular Expression Matching"]
-      },
-      {
-        id: "bitwise-xor",
-        title: "14. Bitwise XOR",
-        question: "When to use:\n- Finding a missing number\n- Detecting a single number in pairs\n\nWhat is the Bitwise XOR template?",
-        template: "def find_single_number(nums):\n    ",
-        solution: `def find_single_number(nums):\n    result = 0\n    for num in nums:\n        result ^= num\n    return result`,
-        practice: ["Single Number", "Missing Number", "Find the Duplicate Number", "Decode XORed Array", "XOR Queries of a Subarray"]
+        id: "matrix-traversal",
+        title: "10. 2D Matrix Traversal (Grid Islands)",
+        question: "When to use:\n- Grid or island problems\n- Traversing a 2D matrix\n\nWhat is the 2D Matrix Traversal template?",
+        template: "def traverse_matrix(matrix):\n    ",
+        solution: "def traverse_matrix(matrix):\n    ROWS, COLS = len(matrix), len(matrix[0])\n    visited = set()\n    directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]\n    \n    def dfs(r, c):\n        if (r < 0 or c < 0 or r == ROWS or c == COLS or (r, c) in visited or matrix[r][c] == 0):\n            return\n        \n        visited.add((r, c))\n        # process cell here\n        \n        for dr, dc in directions:\n            dfs(r + dr, c + dc)\n            \n    for r in range(ROWS):\n        for c in range(COLS):\n            if matrix[r][c] == 1 and (r, c) not in visited:\n                dfs(r, c)",
+        practice: ["Number of Islands", "Max Area of Island", "Rotting Oranges", "Word Search", "Surrounded Regions"]
       },
       {
         id: "graph-traversal",
-        title: "15. Graph Traversal",
+        title: "11. Graph Traversal",
         question: "When to use:\n- Finding shortest paths\n- Detecting cycles\n\nWhat is the Graph Traversal (BFS) template?",
         template: "from collections import defaultdict, deque\n\ndef bfs(graph, start):\n    ",
-        solution: `from collections import defaultdict, deque\n\ndef bfs(graph, start):\n    visited = set()\n    queue = deque([start])\n    visited.add(start)\n    \n    while queue:\n        node = queue.popleft()\n        # Process node\n        for neighbor in graph[node]:\n            if neighbor not in visited:\n                visited.add(neighbor)\n                queue.append(neighbor)`,
-        practice: ["Number of Islands", "Clone Graph", "Pacific Atlantic Water Flow", "Word Ladder", "Graph Valid Tree"]
+        solution: "from collections import deque\n\ndef bfs(graph, start):\n    visited = set([start])\n    queue = deque([start])\n    \n    while queue:\n        node = queue.popleft()\n        \n        # process node here\n        \n        for neighbor in graph[node]:\n            if neighbor not in visited:\n                visited.add(neighbor)\n                queue.append(neighbor)",
+        practice: ["Clone Graph", "Pacific Atlantic Water Flow", "Word Ladder", "Shortest Path in Binary Matrix", "Snakes and Ladders"]
+      },
+      {
+        id: "subsets",
+        title: "12. Subsets (Backtracking)",
+        question: "When to use:\n- Generating all subsets\n- Creating permutations\n\nWhat is the Subsets (Backtracking) template?",
+        template: "def subsets(nums):\n    ",
+        solution: "def subsets(nums):\n    result = []\n    \n    def backtrack(start, current_path):\n        result.append(current_path[:])\n        \n        for i in range(start, len(nums)):\n            # make a choice\n            current_path.append(nums[i])\n            \n            # explore that choice\n            backtrack(i + 1, current_path)\n            \n            # undo the choice (backtrack)\n            current_path.pop()\n            \n    backtrack(0, [])\n    return result",
+        practice: ["Subsets", "Permutations", "Combination Sum", "Letter Combinations of a Phone Number", "Generate Parentheses"]
+      },
+      {
+        id: "topological-sort",
+        title: "13. Topological Sort",
+        question: "When to use:\n- Course scheduling\n- Build dependencies\n\nWhat is the Topological Sort template?",
+        template: "from collections import defaultdict, deque\n\ndef topological_sort(num_nodes, edges):\n    ",
+        solution: "from collections import defaultdict, deque\n\ndef topological_sort(num_nodes, edges):\n    # initialize graph and in-degrees\n    graph = defaultdict(list)\n    in_degree = {i: 0 for i in range(num_nodes)}\n    \n    # build graph\n    for src, dest in edges:\n        graph[src].append(dest)\n        in_degree[dest] += 1\n        \n    # queue nodes with 0 in-degree\n    queue = deque([node for node in in_degree if in_degree[node] == 0])\n    result = []\n    \n    while queue:\n        node = queue.popleft()\n        result.append(node)\n        \n        # process neighbors\n        for neighbor in graph[node]:\n            in_degree[neighbor] -= 1\n            if in_degree[neighbor] == 0:\n                queue.append(neighbor)\n                \n    # cycle detected\n    if len(result) != num_nodes:\n        return []\n        \n    return result",
+        practice: ["Course Schedule", "Course Schedule II", "Alien Dictionary", "Minimum Height Trees", "Sequence Reconstruction"]
+      },
+      {
+        id: "union-find",
+        title: "14. Union Find (Disjoint Set)",
+        question: "When to use:\n- Checking if two elements are in the same set\n- Graph connectivity and cycle detection\n\nWhat is the Union Find template?",
+        template: "class UnionFind:\n    def __init__(self, n):\n        ",
+        solution: "class UnionFind:\n    def __init__(self, n):\n        self.parent = [i for i in range(n)]\n        self.rank = [1] * n\n        \n    def find(self, x):\n        if self.parent[x] != x:\n            self.parent[x] = self.find(self.parent[x]) # path compression\n        return self.parent[x]\n        \n    def union(self, x, y):\n        rootX = self.find(x)\n        rootY = self.find(y)\n        \n        if rootX != rootY:\n            # union by rank\n            if self.rank[rootX] > self.rank[rootY]:\n                self.parent[rootY] = rootX\n            elif self.rank[rootX] < self.rank[rootY]:\n                self.parent[rootX] = rootY\n            else:\n                self.parent[rootY] = rootX\n                self.rank[rootX] += 1\n            return True\n        return False",
+        practice: ["Number of Connected Components in an Undirected Graph", "Redundant Connection", "Accounts Merge", "Graph Valid Tree", "Longest Consecutive Sequence"]
+      },
+      {
+        id: "trie",
+        title: "15. Trie (Prefix Tree)",
+        question: "When to use:\n- Autocomplete features\n- Efficient string storage/search\n\nWhat is the Trie template?",
+        template: "class TrieNode:\n    def __init__(self):\n        \n\nclass Trie:\n    def __init__(self):\n        ",
+        solution: "class TrieNode:\n    def __init__(self):\n        self.children = {}\n        self.is_end = False\n\nclass Trie:\n    def __init__(self):\n        self.root = TrieNode()\n        \n    def insert(self, word):\n        node = self.root\n        for char in word:\n            if char not in node.children:\n                node.children[char] = TrieNode()\n            node = node.children[char]\n        node.is_end = True\n        \n    def search(self, word):\n        node = self.root\n        for char in word:\n            if char not in node.children:\n                return False\n            node = node.children[char]\n        return node.is_end",
+        practice: ["Implement Trie (Prefix Tree)", "Word Search II", "Design Add and Search Words Data Structure", "Replace Words", "Palindrome Pairs"]
       },
       {
         id: "monotonic-stack",
         title: "16. Monotonic Stack/Queue",
         question: "When to use:\n- Finding the next greater/smaller element\n- Histogram problems\n\nWhat is the Monotonic Stack template?",
         template: "def monotonic_stack(arr):\n    ",
-        solution: `def monotonic_stack(arr):\n    # This is the corrected template for finding the 'Next Greater Element'\n    stack = []\n    result = [-1] * len(arr)\n    \n    for i in range(len(arr)):\n        # While stack is not empty and current element is greater than the element at stack top index\n        while stack and arr[stack[-1]] < arr[i]:\n            idx = stack.pop()\n            result[idx] = arr[i] # Resolve the answer for the popped index\n        \n        # Push current index to stack\n        stack.append(i)\n        \n    return result`,
+        solution: "def monotonic_stack(arr):\n    stack = []\n    result = [-1] * len(arr)\n    \n    for i in range(len(arr)):\n        # maintain monotonic property (e.g., decreasing)\n        while stack and arr[stack[-1]] < arr[i]:\n            idx = stack.pop()\n            # resolve answer for the popped index\n            result[idx] = arr[i]\n            \n        stack.append(i)\n        \n    return result",
         practice: ["Next Greater Element I", "Daily Temperatures", "Largest Rectangle in Histogram", "Trapping Rain Water", "Remove K Digits"]
       },
       {
-        id: "trie",
-        title: "17. Trie (Prefix Tree)",
-        question: "When to use:\n- Autocomplete features\n- Efficient string storage/search\n\nWhat is the Trie template?",
-        template: "class TrieNode:\n    def __init__(self):\n        \n\nclass Trie:\n    def __init__(self):\n        ",
-        solution: `class TrieNode:\n    def __init__(self):\n        self.children = {}\n        self.is_end = False\n\nclass Trie:\n    def __init__(self):\n        self.root = TrieNode()\n    \n    def insert(self, word):\n        node = self.root\n        for char in word:\n            if char not in node.children:\n                node.children[char] = TrieNode()\n            node = node.children[char]\n        node.is_end = True\n    \n    def search(self, word):\n        node = self.root\n        for char in word:\n            if char not in node.children:\n                return False\n            node = node.children[char]\n        return node.is_end`,
-        practice: ["Implement Trie (Prefix Tree)", "Word Search II", "Design Add and Search Words Data Structure", "Replace Words", "Palindrome Pairs"]
+        id: "two-heaps",
+        title: "17. Two Heaps",
+        question: "When to use:\n- Finding the median in a stream\n- Scheduling problems\n\nWhat is the Two Heaps (Median Finder) template?",
+        template: "import heapq\n\nclass MedianFinder:\n    def __init__(self):\n        ",
+        solution: "import heapq\n\nclass MedianFinder:\n    def __init__(self):\n        self.max_heap = [] # invert numbers to simulate max_heap\n        self.min_heap = []\n        \n    def addNum(self, num: int) -> None:\n        heapq.heappush(self.max_heap, -num)\n        \n        # balance by moving the largest from max_heap to min_heap\n        heapq.heappush(self.min_heap, -heapq.heappop(self.max_heap))\n        \n        # maintain size property (max_heap can have 1 more element)\n        if len(self.min_heap) > len(self.max_heap):\n            heapq.heappush(self.max_heap, -heapq.heappop(self.min_heap))\n            \n    def findMedian(self) -> float:\n        if len(self.max_heap) > len(self.min_heap):\n            return float(-self.max_heap[0])\n        return (-self.max_heap[0] + self.min_heap[0]) / 2.0",
+        practice: ["Find Median from Data Stream", "Sliding Window Median", "IPO", "Find Right Interval", "Schedule Tasks on Minimum Machines"]
+      },
+      {
+        id: "dynamic-programming",
+        title: "18. Dynamic Programming",
+        question: "When to use:\n- Optimization problems\n- Counting problems\n\nWhat is the basic Dynamic Programming template?",
+        template: "def dynamic_programming(n):\n    ",
+        solution: "def dynamic_programming(n):\n    if n <= 1:\n        return n\n        \n    # initialize dp array with base cases\n    dp = [0] * (n + 1)\n    dp[0] = 0\n    dp[1] = 1\n    \n    # build up solutions\n    for i in range(2, n + 1):\n        # apply recurrence relation\n        dp[i] = dp[i-1] + dp[i-2]\n        \n    return dp[n]",
+        practice: ["Climbing Stairs", "Coin Change", "Longest Increasing Subsequence", "Word Break", "Regular Expression Matching"]
+      },
+      {
+        id: "cyclic-sort",
+        title: "19. Cyclic Sort",
+        question: "When to use:\n- Finding missing numbers\n- Detecting duplicates in a specific range\n\nWhat is the Cyclic Sort template?",
+        template: "def cyclic_sort(nums):\n    ",
+        solution: "def cyclic_sort(nums):\n    i = 0\n    while i < len(nums):\n        # determine where the current number SHOULD go (assuming 1 to n range)\n        correct_pos = nums[i] - 1 \n        \n        # if the number is in range and not at its correct position, swap\n        if 0 <= correct_pos < len(nums) and nums[i] != nums[correct_pos]:\n            nums[i], nums[correct_pos] = nums[correct_pos], nums[i]\n        else:\n            i += 1\n            \n    # iterate again to find the missing/duplicate element\n    return nums",
+        practice: ["Missing Number", "Find All Numbers Disappeared in an Array", "Find the Duplicate Number", "First Missing Positive", "Kth Missing Positive Number"]
+      },
+      {
+        id: "bitwise-xor",
+        title: "20. Bitwise XOR",
+        question: "When to use:\n- Finding a missing number\n- Detecting a single number in pairs\n\nWhat is the Bitwise XOR template?",
+        template: "def find_single_number(nums):\n    ",
+        solution: "def find_single_number(nums):\n    result = 0\n    \n    for num in nums:\n        result ^= num\n        \n    return result",
+        practice: ["Single Number", "Missing Number", "Find the Duplicate Number", "Decode XORed Array", "XOR Queries of a Subarray"]
       }
     ];
 
