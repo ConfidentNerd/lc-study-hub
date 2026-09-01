@@ -22,7 +22,7 @@ I mostly vibe-coded this with AI to see how far I could take it. It's not meant 
 
 * **Pattern Recognition**
   * **Why it's needed:** Knowing how to write a pattern is useless if you can't identify *when* to use it. You need to build the intuition to read an interview prompt and immediately spot the required algorithm.
-  * **What it does:** A quiz module featuring over 100 of the most popular interview questions (including the entire Blind 75 plus other essential questions). It displays a problem description and challenges you to diagnose the correct pattern. It includes an optional timer (5, 10, or 15 minutes) to gamify the experience and build speed, and provides the specific clues that give away the correct pattern after you answer.
+  * **What it does:** A quiz module featuring over 150 of the most popular interview questions (including the entire Blind 75 plus other essential questions). It displays a problem description and challenges you to diagnose the correct pattern. It includes an optional timer (5, 10, or 15 minutes) to gamify the experience and build speed, and provides the specific clues that give away the correct pattern after you answer.
 
 ## Usage
 

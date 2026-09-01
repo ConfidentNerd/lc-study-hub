@@ -189,7 +189,13 @@
             "kadanes-algorithm": "Kadane's Algorithm",
             "top-k-elements": "Top K Elements",
             "stack": "Stack",
-            "k-way-merge": "K-way Merge"
+            "k-way-merge": "K-way Merge",
+            "hash-map": "Hash Map",
+            "prefix-sum": "Prefix Sum",
+            "union-find": "Union Find (Disjoint Set)",
+            "matrix-manipulation": "Matrix Manipulation",
+            "greedy": "Greedy",
+            "bit-manipulation": "Bit Manipulation"
         };
 
         const questionsData = [
@@ -614,6 +620,381 @@
                 title: "Evaluate Reverse Polish Notation", difficulty: "Medium", patternId: "stack", url: "https://leetcode.com/problems/evaluate-reverse-polish-notation/",
                 clues: "Push numbers onto a stack. Whenever an operator is encountered, pop the top two numbers, apply the operation, and push the result back onto the stack.",
                 description: "You are given an array of strings tokens that represents an arithmetic expression in a Reverse Polish Notation. Evaluate the expression. Return an integer that represents the value of the expression."
+            },
+            {
+                title: "Two Sum", difficulty: "Easy", patternId: "hash-map", url: "https://leetcode.com/problems/two-sum/",
+                clues: "The array is unsorted, so two pointers are out. Store each value's index in a hash map as you scan and check for 'target - num' in O(1).",
+                description: "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target. You may assume that each input would have exactly one solution."
+            },
+            {
+                title: "Contains Duplicate", difficulty: "Easy", patternId: "hash-map", url: "https://leetcode.com/problems/contains-duplicate/",
+                clues: "A membership question: 'have I already seen this value?'. A hash set answers it in O(1) per element in a single pass.",
+                description: "Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct."
+            },
+            {
+                title: "Valid Anagram", difficulty: "Easy", patternId: "hash-map", url: "https://leetcode.com/problems/valid-anagram/",
+                clues: "Pure frequency counting. Tally the characters of one string in a hash map and decrement with the other; every count must land back on zero.",
+                description: "Given two strings s and t, return true if t is an anagram of s, and false otherwise."
+            },
+            {
+                title: "Majority Element", difficulty: "Easy", patternId: "hash-map", url: "https://leetcode.com/problems/majority-element/",
+                clues: "Counting occurrences points straight at a frequency hash map. (Boyer-Moore voting solves it in O(1) space if the interviewer pushes.)",
+                description: "Given an array nums of size n, return the majority element: the element that appears more than n / 2 times. You may assume that the majority element always exists in the array."
+            },
+            {
+                title: "Group Anagrams", difficulty: "Medium", patternId: "hash-map", url: "https://leetcode.com/problems/group-anagrams/",
+                clues: "Grouping items by a computed key. Sorted characters (or a 26-length count tuple) is identical for every anagram, so use it as the hash map key.",
+                description: "Given an array of strings strs, group the anagrams together. You can return the answer in any order."
+            },
+            {
+                title: "Longest Consecutive Sequence", difficulty: "Medium", patternId: "hash-map", url: "https://leetcode.com/problems/longest-consecutive-sequence/",
+                clues: "The O(n) requirement rules out sorting. Put everything in a hash set and only start counting a run at a number whose predecessor (num - 1) is absent.",
+                description: "Given an unsorted array of integers nums, return the length of the longest consecutive elements sequence. You must write an algorithm that runs in O(n) time."
+            },
+            {
+                title: "Encode and Decode Strings", difficulty: "Medium", patternId: "hash-map", url: "https://leetcode.com/problems/encode-and-decode-strings/",
+                clues: "Any delimiter could legally appear inside a string, so prefix each string with its length plus a separator. Decoding reads the length, then exactly that many characters.",
+                description: "Design an algorithm to encode a list of strings into a single string, and decode that single string back into the original list of strings."
+            },
+            {
+                title: "Range Sum Query - Immutable", difficulty: "Easy", patternId: "prefix-sum", url: "https://leetcode.com/problems/range-sum-query-immutable/",
+                clues: "Many queries against an array that never changes. Precompute cumulative sums once so each query becomes prefix[right + 1] - prefix[left] in O(1).",
+                description: "Given an integer array nums, handle multiple queries of the following type: calculate the sum of the elements of nums between indices left and right inclusive."
+            },
+            {
+                title: "Find Pivot Index", difficulty: "Easy", patternId: "prefix-sum", url: "https://leetcode.com/problems/find-pivot-index/",
+                clues: "We compare the sum on each side of an index. Track a running left sum; the right sum is simply total - leftSum - nums[i].",
+                description: "Given an array of integers nums, calculate the pivot index: the index where the sum of all the numbers strictly to the left equals the sum of all the numbers strictly to the right. Return the leftmost pivot index, or -1 if none exists."
+            },
+            {
+                title: "Product of Array Except Self", difficulty: "Medium", patternId: "prefix-sum", url: "https://leetcode.com/problems/product-of-array-except-self/",
+                clues: "Division is banned, so build a running prefix product from the left and a running suffix product from the right, then multiply the two at each index.",
+                description: "Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i]. You must write an algorithm that runs in O(n) time and without using the division operation."
+            },
+            {
+                title: "Subarray Sum Equals K", difficulty: "Medium", patternId: "prefix-sum", url: "https://leetcode.com/problems/subarray-sum-equals-k/",
+                clues: "Negative numbers rule out a sliding window. Keep a hash map of prefix-sum frequencies and look up (currentSum - k) to count the subarrays ending here.",
+                description: "Given an array of integers nums and an integer k, return the total number of subarrays whose sum equals to k."
+            },
+            {
+                title: "Continuous Subarray Sum", difficulty: "Medium", patternId: "prefix-sum", url: "https://leetcode.com/problems/continuous-subarray-sum/",
+                clues: "A sum divisible by k. Store the running prefix sum MODULO k in a hash map: if the same remainder appears twice, the elements in between sum to a multiple of k.",
+                description: "Given an integer array nums and an integer k, return true if nums has a good subarray: a subarray of length at least two whose elements sum up to a multiple of k."
+            },
+            {
+                title: "Move Zeroes", difficulty: "Easy", patternId: "two-pointers", url: "https://leetcode.com/problems/move-zeroes/",
+                clues: "A slow 'write' pointer and a fast 'read' pointer. The fast one scans for non-zero values and swaps them into the slow one's slot, preserving relative order.",
+                description: "Given an integer array nums, move all 0's to the end of it while maintaining the relative order of the non-zero elements. Note that you must do this in-place without making a copy of the array."
+            },
+            {
+                title: "Backspace String Compare", difficulty: "Easy", patternId: "two-pointers", url: "https://leetcode.com/problems/backspace-string-compare/",
+                clues: "A backspace only deletes characters to its left, so scanning from the END with one pointer per string lets us skip deleted characters in O(1) space.",
+                description: "Given two strings s and t, return true if they are equal when both are typed into empty text editors. '#' means a backspace character."
+            },
+            {
+                title: "Is Subsequence", difficulty: "Easy", patternId: "two-pointers", url: "https://leetcode.com/problems/is-subsequence/",
+                clues: "One pointer per string, both only moving forward: always advance the pointer in t, and advance the pointer in s only on a match.",
+                description: "Given two strings s and t, return true if s is a subsequence of t, or false otherwise."
+            },
+            {
+                title: "Remove Duplicates from Sorted Array", difficulty: "Easy", patternId: "two-pointers", url: "https://leetcode.com/problems/remove-duplicates-from-sorted-array/",
+                clues: "Because the array is sorted, duplicates sit next to each other. A slow write pointer only advances when the fast pointer finds a new value.",
+                description: "Given an integer array nums sorted in non-decreasing order, remove the duplicates in-place such that each unique element appears only once. Return the number of unique elements k."
+            },
+            {
+                title: "Longest Palindromic Substring", difficulty: "Medium", patternId: "two-pointers", url: "https://leetcode.com/problems/longest-palindromic-substring/",
+                clues: "Every palindrome grows out of a center. Treat each index (and each gap between two indices) as a center and expand two pointers outward while the characters match.",
+                description: "Given a string s, return the longest palindromic substring in s."
+            },
+            {
+                title: "Best Time to Buy and Sell Stock", difficulty: "Easy", patternId: "sliding-window", url: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/",
+                clues: "The buy day must come before the sell day, so keep a window: the left edge tracks the minimum price seen so far, and the right edge tests today's profit against it.",
+                description: "You are given an array prices where prices[i] is the price of a given stock on the ith day. Maximize your profit by choosing a single day to buy and a different day in the future to sell. Return the maximum profit, or 0 if no profit is possible."
+            },
+            {
+                title: "Maximum Average Subarray I", difficulty: "Easy", patternId: "sliding-window", url: "https://leetcode.com/problems/maximum-average-subarray-i/",
+                clues: "A FIXED window of size k. Compute the first window's sum, then slide it: add the incoming element and subtract the outgoing one instead of recomputing.",
+                description: "You are given an integer array nums consisting of n elements, and an integer k. Find a contiguous subarray whose length is equal to k that has the maximum average value and return this value."
+            },
+            {
+                title: "Minimum Size Subarray Sum", difficulty: "Medium", patternId: "sliding-window", url: "https://leetcode.com/problems/minimum-size-subarray-sum/",
+                clues: "Shortest contiguous block meeting a threshold. Grow the window to the right until the sum reaches the target, then shrink from the left while it still qualifies.",
+                description: "Given an array of positive integers nums and a positive integer target, return the minimal length of a subarray whose sum is greater than or equal to target. If there is no such subarray, return 0 instead."
+            },
+            {
+                title: "Fruit Into Baskets", difficulty: "Medium", patternId: "sliding-window", url: "https://leetcode.com/problems/fruit-into-baskets/",
+                clues: "This is 'longest contiguous stretch with at most 2 distinct values'. Expand the right edge and shrink from the left as soon as a third fruit type enters the window.",
+                description: "You are visiting a farm with a single row of fruit trees, represented by an array fruits. You have two baskets and each basket can hold only a single type of fruit. Return the maximum number of fruits you can pick from a contiguous stretch of trees."
+            },
+            {
+                title: "Subarray Product Less Than K", difficulty: "Medium", patternId: "sliding-window", url: "https://leetcode.com/problems/subarray-product-less-than-k/",
+                clues: "All values are positive, so the product shrinks as the window shrinks. Slide the right edge, divide out from the left while the product is too big, and add the window length to the count.",
+                description: "Given an array of integers nums and an integer k, return the number of contiguous subarrays where the product of all the elements in the subarray is strictly less than k."
+            },
+            {
+                title: "Binary Search", difficulty: "Easy", patternId: "modified-binary-search", url: "https://leetcode.com/problems/binary-search/",
+                clues: "A sorted array plus an explicit O(log n) requirement. This is the textbook template: halve the search space using low, high, and mid.",
+                description: "Given an array of integers nums which is sorted in ascending order, and an integer target, write a function to search target in nums. If target exists, return its index. Otherwise, return -1. You must write an algorithm with O(log n) runtime complexity."
+            },
+            {
+                title: "Find Smallest Letter Greater Than Target", difficulty: "Easy", patternId: "modified-binary-search", url: "https://leetcode.com/problems/find-smallest-letter-greater-than-target/",
+                clues: "Sorted input with a 'smallest element strictly greater than X' question. That is a binary search for an upper bound, wrapping back to index 0 if nothing qualifies.",
+                description: "You are given an array of characters letters that is sorted in non-decreasing order, and a character target. Return the smallest character in letters that is lexicographically greater than target. Letters wrap around."
+            },
+            {
+                title: "Peak Index in a Mountain Array", difficulty: "Medium", patternId: "modified-binary-search", url: "https://leetcode.com/problems/peak-index-in-a-mountain-array/",
+                clues: "The array rises and then falls, so comparing mid with mid + 1 tells you which slope you are standing on and lets you discard half the array.",
+                description: "You are given an integer mountain array arr whose values increase strictly to a peak and then decrease strictly. Return the index of the peak element."
+            },
+            {
+                title: "Koko Eating Bananas", difficulty: "Medium", patternId: "modified-binary-search", url: "https://leetcode.com/problems/koko-eating-bananas/",
+                clues: "The array is not sorted, but the ANSWER space is. Binary search the eating speed between 1 and max(piles), testing feasibility for each candidate speed.",
+                description: "Koko can decide her bananas-per-hour eating speed k. Given the piles of bananas and h hours before the guards return, return the minimum integer k such that she can eat all the bananas within h hours."
+            },
+            {
+                title: "Meeting Rooms", difficulty: "Easy", patternId: "merge-intervals", url: "https://leetcode.com/problems/meeting-rooms/",
+                clues: "Sort by start time, then a single pass asking whether any meeting starts before the previous one ends answers the overlap question.",
+                description: "Given an array of meeting time intervals where intervals[i] = [starti, endi], determine if a person could attend all meetings."
+            },
+            {
+                title: "Interval List Intersections", difficulty: "Medium", patternId: "merge-intervals", url: "https://leetcode.com/problems/interval-list-intersections/",
+                clues: "Both lists are already sorted, so sweep them with one pointer each. The intersection is [max(starts), min(ends)] when that range is valid; then advance whichever interval ends first.",
+                description: "You are given two lists of closed intervals, firstList and secondList, each sorted and pairwise disjoint. Return the intersection of these two interval lists."
+            },
+            {
+                title: "Employee Free Time", difficulty: "Hard", patternId: "merge-intervals", url: "https://leetcode.com/problems/employee-free-time/",
+                clues: "Flatten every employee's schedule into one list, sort by start time and merge the overlapping busy blocks. The gaps left between merged blocks are the common free time.",
+                description: "We are given a list schedule of employees, which represents the working time for each employee. Return the list of finite intervals representing common, positive-length free time for all employees, in sorted order."
+            },
+            {
+                title: "Happy Number", difficulty: "Easy", patternId: "fast-slow-pointers", url: "https://leetcode.com/problems/happy-number/",
+                clues: "Repeatedly applying the digit-square-sum produces a sequence that either reaches 1 or loops forever. Floyd's cycle detection spots the loop in O(1) space.",
+                description: "Write an algorithm to determine if a number n is happy: repeatedly replace the number by the sum of the squares of its digits, until it either equals 1 or loops endlessly in a cycle."
+            },
+            {
+                title: "Linked List Cycle II", difficulty: "Medium", patternId: "fast-slow-pointers", url: "https://leetcode.com/problems/linked-list-cycle-ii/",
+                clues: "After the fast and slow pointers meet inside the loop, reset one pointer to the head and move both one step at a time. They meet exactly at the cycle's entrance.",
+                description: "Given the head of a linked list, return the node where the cycle begins. If there is no cycle, return null. Do not modify the linked list."
+            },
+            {
+                title: "Remove Nth Node From End of List", difficulty: "Medium", patternId: "fast-slow-pointers", url: "https://leetcode.com/problems/remove-nth-node-from-end-of-list/",
+                clues: "Give the fast pointer an n-node head start, then advance both together. When fast hits the end, slow sits right before the node to delete: one pass, no length count.",
+                description: "Given the head of a linked list, remove the nth node from the end of the list and return its head."
+            },
+            {
+                title: "Merge Two Sorted Lists", difficulty: "Easy", patternId: "inplace-reversal-ll", url: "https://leetcode.com/problems/merge-two-sorted-lists/",
+                clues: "Pointer surgery on linked lists. Use a dummy head and repeatedly splice the smaller node onto the tail, rewiring next pointers rather than copying values.",
+                description: "You are given the heads of two sorted linked lists list1 and list2. Splice them together into one sorted list and return the head of the merged linked list."
+            },
+            {
+                title: "Remove Linked List Elements", difficulty: "Easy", patternId: "inplace-reversal-ll", url: "https://leetcode.com/problems/remove-linked-list-elements/",
+                clues: "A dummy node in front of the head kills the special case of deleting the first node. After that it is just relinking prev.next past the matching nodes.",
+                description: "Given the head of a linked list and an integer val, remove all the nodes of the linked list that have Node.val == val, and return the new head."
+            },
+            {
+                title: "Remove Duplicates from Sorted List", difficulty: "Easy", patternId: "inplace-reversal-ll", url: "https://leetcode.com/problems/remove-duplicates-from-sorted-list/",
+                clues: "Pointer rewiring on a sorted list: walk it once and whenever the next node holds the same value, skip that node by pointing next past it.",
+                description: "Given the head of a sorted linked list, delete all duplicates such that each element appears only once. Return the linked list sorted as well."
+            },
+            {
+                title: "Swap Nodes in Pairs", difficulty: "Medium", patternId: "inplace-reversal-ll", url: "https://leetcode.com/problems/swap-nodes-in-pairs/",
+                clues: "This is in-place reversal with k = 2. Use a dummy head, keep a reference to the node before each pair, and relink the pair's pointers.",
+                description: "Given a linked list, swap every two adjacent nodes and return its head. You must solve the problem without modifying the values in the list's nodes."
+            },
+            {
+                title: "Rotate List", difficulty: "Medium", patternId: "inplace-reversal-ll", url: "https://leetcode.com/problems/rotate-list/",
+                clues: "Close the list into a ring, then break it at the right spot: k modulo the length tells you how many nodes from the end the new head sits.",
+                description: "Given the head of a linked list, rotate the list to the right by k places."
+            },
+            {
+                title: "Reorder List", difficulty: "Medium", patternId: "inplace-reversal-ll", url: "https://leetcode.com/problems/reorder-list/",
+                clues: "Three classic steps: find the middle with fast and slow pointers, reverse the second half in place, then weave the two halves together node by node.",
+                description: "You are given the head of a singly linked list. Reorder it so the nodes alternate from the front and the back of the list. You may not modify the values in the list's nodes, only the nodes themselves."
+            },
+            {
+                title: "Same Tree", difficulty: "Easy", patternId: "tree-dfs", url: "https://leetcode.com/problems/same-tree/",
+                clues: "Walk both trees in lockstep with recursion: check the values at the current pair of nodes, then recurse on the left pair and the right pair.",
+                description: "Given the roots of two binary trees p and q, write a function to check if they are the same tree (structurally identical with the same node values)."
+            },
+            {
+                title: "Invert Binary Tree", difficulty: "Easy", patternId: "tree-dfs", url: "https://leetcode.com/problems/invert-binary-tree/",
+                clues: "Swap the left and right children at every node. A plain recursive DFS (or an explicit stack) visits each node exactly once.",
+                description: "Given the root of a binary tree, invert the tree, and return its root."
+            },
+            {
+                title: "Path Sum", difficulty: "Easy", patternId: "tree-dfs", url: "https://leetcode.com/problems/path-sum/",
+                clues: "A root-to-leaf question, so we must descend to the leaves. Recurse while subtracting each node's value from the target and check that it hits zero exactly at a leaf.",
+                description: "Given the root of a binary tree and an integer targetSum, return true if the tree has a root-to-leaf path such that adding up all the values along the path equals targetSum."
+            },
+            {
+                title: "Binary Tree Paths", difficulty: "Easy", patternId: "tree-dfs", url: "https://leetcode.com/problems/binary-tree-paths/",
+                clues: "We need every root-to-leaf path, so walk all the way down each branch, appending to the current path and undoing that choice on the way back up.",
+                description: "Given the root of a binary tree, return all root-to-leaf paths in any order."
+            },
+            {
+                title: "Subtree of Another Tree", difficulty: "Easy", patternId: "tree-dfs", url: "https://leetcode.com/problems/subtree-of-another-tree/",
+                clues: "Two nested DFS walks: traverse the main tree looking for a node matching subRoot's value, then run a full 'same tree' comparison starting from that node.",
+                description: "Given the roots of two binary trees root and subRoot, return true if there is a subtree of root with the same structure and node values as subRoot."
+            },
+            {
+                title: "Validate Binary Search Tree", difficulty: "Medium", patternId: "tree-dfs", url: "https://leetcode.com/problems/validate-binary-search-tree/",
+                clues: "Comparing a node only with its direct children is not enough. Pass a (min, max) valid range down through the DFS, or check that an in-order traversal is strictly increasing.",
+                description: "Given the root of a binary tree, determine if it is a valid binary search tree (BST)."
+            },
+            {
+                title: "Insert into a Binary Search Tree", difficulty: "Medium", patternId: "tree-dfs", url: "https://leetcode.com/problems/insert-into-a-binary-search-tree/",
+                clues: "Descend using the BST property, comparing the value at each node, until you reach an empty spot, and hang the new leaf there.",
+                description: "You are given the root node of a binary search tree (BST) and a value to insert into the tree. Return the root node of the BST after the insertion."
+            },
+            {
+                title: "Delete Node in a BST", difficulty: "Medium", patternId: "tree-dfs", url: "https://leetcode.com/problems/delete-node-in-a-bst/",
+                clues: "Search down with the BST property, then handle three cases at the target: no child, one child, or two children (swap in the in-order successor and delete it recursively).",
+                description: "Given a root node reference of a BST and a key, delete the node with the given key in the BST. Return the root node reference of the possibly updated BST."
+            },
+            {
+                title: "Construct Binary Tree from Preorder and Inorder Traversal", difficulty: "Medium", patternId: "tree-dfs", url: "https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/",
+                clues: "Preorder hands us the root; the inorder array tells us how many nodes belong to the left subtree. Recursively build each side, which is DFS over index ranges.",
+                description: "Given two integer arrays preorder and inorder where preorder is the preorder traversal of a binary tree and inorder is the inorder traversal of the same tree, construct and return the binary tree."
+            },
+            {
+                title: "Flatten Binary Tree to Linked List", difficulty: "Medium", patternId: "tree-dfs", url: "https://leetcode.com/problems/flatten-binary-tree-to-linked-list/",
+                clues: "Rewire pointers in pre-order. A reverse pre-order DFS (right, then left, then node) lets you attach each node in front of the portion you have already flattened.",
+                description: "Given the root of a binary tree, flatten the tree into a 'linked list' in-place, where the right child pointer points to the next node in pre-order and the left child is always null."
+            },
+            {
+                title: "Binary Tree Maximum Path Sum", difficulty: "Hard", patternId: "tree-dfs", url: "https://leetcode.com/problems/binary-tree-maximum-path-sum/",
+                clues: "Post-order DFS: each call returns the best single-branch sum to bubble upward, while a global answer is updated with left + node + right (a path that bends at this node).",
+                description: "A path in a binary tree is a sequence of adjacent nodes, and it does not need to pass through the root. Given the root of a binary tree, return the maximum path sum of any non-empty path."
+            },
+            {
+                title: "Max Area of Island", difficulty: "Medium", patternId: "graph-traversal", url: "https://leetcode.com/problems/max-area-of-island/",
+                clues: "The same grid flood fill as Number of Islands, except each DFS returns the size of the region it filled so we can keep the maximum.",
+                description: "You are given an m x n binary matrix grid. An island is a group of 1's connected 4-directionally. Return the maximum area of an island in grid. If there is no island, return 0."
+            },
+            {
+                title: "Surrounded Regions", difficulty: "Medium", patternId: "graph-traversal", url: "https://leetcode.com/problems/surrounded-regions/",
+                clues: "Invert the problem: run DFS/BFS from the 'O's on the border to mark the regions that escape. Everything left unmarked is surrounded and gets flipped.",
+                description: "Given an m x n matrix board containing 'X' and 'O', capture all regions that are 4-directionally surrounded by 'X' by flipping all 'O's in that region into 'X's."
+            },
+            {
+                title: "Shortest Path in Binary Matrix", difficulty: "Medium", patternId: "graph-traversal", url: "https://leetcode.com/problems/shortest-path-in-binary-matrix/",
+                clues: "The words 'shortest path' on an unweighted grid mean BFS, not DFS. Explore all 8 neighbours level by level so the first arrival at the target is the shortest.",
+                description: "Given an n x n binary matrix grid, return the length of the shortest clear path from the top-left cell to the bottom-right cell, moving 8-directionally through cells valued 0, or -1 if there is no such path."
+            },
+            {
+                title: "Word Ladder", difficulty: "Hard", patternId: "graph-traversal", url: "https://leetcode.com/problems/word-ladder/",
+                clues: "Words are nodes and one-letter changes are edges. We want the SHORTEST transformation, which is textbook BFS over an implicit graph.",
+                description: "Given two words beginWord and endWord, and a dictionary wordList, return the number of words in the shortest transformation sequence from beginWord to endWord, changing a single letter at a time, or 0 if no such sequence exists."
+            },
+            {
+                title: "Number of Connected Components in an Undirected Graph", difficulty: "Medium", patternId: "union-find", url: "https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/",
+                clues: "Union every edge and count how often two separate sets actually merge: components = n - successful unions. (A DFS over unvisited nodes also works.)",
+                description: "You have a graph of n nodes labeled from 0 to n - 1 and an array edges where edges[i] = [ai, bi] indicates an undirected edge between the two nodes. Return the number of connected components in the graph."
+            },
+            {
+                title: "Graph Valid Tree", difficulty: "Medium", patternId: "union-find", url: "https://leetcode.com/problems/graph-valid-tree/",
+                clues: "A valid tree needs exactly n - 1 edges, full connectivity, and no cycles. Union Find flags a cycle the moment an edge joins two nodes already in the same set.",
+                description: "Given n nodes labeled from 0 to n - 1 and a list of undirected edges, write a function to check whether these edges make up a valid tree."
+            },
+            {
+                title: "Redundant Connection", difficulty: "Medium", patternId: "union-find", url: "https://leetcode.com/problems/redundant-connection/",
+                clues: "We are hunting the edge that closes a cycle. Union the nodes one edge at a time; the first edge whose endpoints already share a root is the answer.",
+                description: "You are given a graph that started as a tree with n nodes, with one additional edge added. Return an edge that can be removed so that the resulting graph is a tree of n nodes. Return the answer that occurs last in the input."
+            },
+            {
+                title: "Accounts Merge", difficulty: "Medium", patternId: "union-find", url: "https://leetcode.com/problems/accounts-merge/",
+                clues: "A shared email is an edge linking two accounts of the same person. We need everything transitively connected grouped together, which is exactly what Union Find does.",
+                description: "Given a list of accounts where accounts[i][0] is a name and the rest of the entries are emails, merge the accounts that share at least one common email. Return the accounts in the format: name followed by sorted emails."
+            },
+            {
+                title: "Replace Words", difficulty: "Medium", patternId: "trie", url: "https://leetcode.com/problems/replace-words/",
+                clues: "We need the shortest matching PREFIX for each word from a dictionary of roots. Build a Trie of the roots and walk each word down it until you hit an end-of-word marker.",
+                description: "Given a dictionary of roots and a sentence, replace all the successors in the sentence with the root forming it. If a successor can be replaced by more than one root, replace it with the shortest root."
+            },
+            {
+                title: "Subsets II", difficulty: "Medium", patternId: "subsets", url: "https://leetcode.com/problems/subsets-ii/",
+                clues: "Backtracking again, but duplicates must not produce duplicate subsets: sort the array first and skip an element that equals the previous one at the same recursion depth.",
+                description: "Given an integer array nums that may contain duplicates, return all possible subsets (the power set). The solution set must not contain duplicate subsets."
+            },
+            {
+                title: "Generate Parentheses", difficulty: "Medium", patternId: "subsets", url: "https://leetcode.com/problems/generate-parentheses/",
+                clues: "Generate all valid arrangements with backtracking and two counters: add an open bracket while some remain, and add a close bracket only while closes used are fewer than opens.",
+                description: "Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses."
+            },
+            {
+                title: "Kth Largest Element in an Array", difficulty: "Medium", patternId: "top-k-elements", url: "https://leetcode.com/problems/kth-largest-element-in-an-array/",
+                clues: "We only need the kth largest, not a full sort. A Min-Heap capped at size k holds the k biggest values with the answer at its root. (Quickselect gives O(n) average.)",
+                description: "Given an integer array nums and an integer k, return the kth largest element in the array. Note that it is the kth largest element in sorted order, not the kth distinct element."
+            },
+            {
+                title: "House Robber II", difficulty: "Medium", patternId: "dynamic-programming", url: "https://leetcode.com/problems/house-robber-ii/",
+                clues: "The same adjacent-house DP as House Robber, but the houses form a circle. Run the linear DP twice, once skipping the first house and once skipping the last, then take the max.",
+                description: "All houses at this place are arranged in a circle, so the first house is the neighbor of the last one. You cannot rob two adjacent houses. Given an integer array nums, return the maximum amount of money you can rob tonight."
+            },
+            {
+                title: "Unique Paths", difficulty: "Medium", patternId: "dynamic-programming", url: "https://leetcode.com/problems/unique-paths/",
+                clues: "Counting paths across a grid. Each cell can only be reached from above or from the left, so dp[i][j] = dp[i-1][j] + dp[i][j-1].",
+                description: "There is a robot on an m x n grid, starting at the top-left corner. The robot can only move either down or right. Return the number of possible unique paths to reach the bottom-right corner."
+            },
+            {
+                title: "Partition Equal Subset Sum", difficulty: "Medium", patternId: "dynamic-programming", url: "https://leetcode.com/problems/partition-equal-subset-sum/",
+                clues: "A 0/1 knapsack in disguise: can we pick a subset summing to total / 2? Use a boolean DP over reachable sums, processing each number exactly once.",
+                description: "Given an integer array nums, return true if you can partition the array into two subsets such that the sum of the elements in both subsets is equal."
+            },
+            {
+                title: "Longest Common Subsequence", difficulty: "Medium", patternId: "dynamic-programming", url: "https://leetcode.com/problems/longest-common-subsequence/",
+                clues: "Two strings compared character by character means a 2D DP grid. On a match dp[i][j] = dp[i-1][j-1] + 1, otherwise take the best of dropping a character from either string.",
+                description: "Given two strings text1 and text2, return the length of their longest common subsequence. If there is no common subsequence, return 0."
+            },
+            {
+                title: "Edit Distance", difficulty: "Hard", patternId: "dynamic-programming", url: "https://leetcode.com/problems/edit-distance/",
+                clues: "Two strings transforming into one another: build a 2D DP table where each cell takes the cheapest of insert, delete, or replace from its neighbouring cells.",
+                description: "Given two strings word1 and word2, return the minimum number of operations (insert a character, delete a character, or replace a character) required to convert word1 to word2."
+            },
+            {
+                title: "Jump Game", difficulty: "Medium", patternId: "greedy", url: "https://leetcode.com/problems/jump-game/",
+                clues: "No DP table needed. Track the farthest index reachable so far as you scan; if you ever stand on an index beyond that reach, you are stuck.",
+                description: "You are given an integer array nums. You are initially positioned at the array's first index, and each element represents your maximum jump length at that position. Return true if you can reach the last index."
+            },
+            {
+                title: "Gas Station", difficulty: "Medium", patternId: "greedy", url: "https://leetcode.com/problems/gas-station/",
+                clues: "If the total gas covers the total cost, a solution must exist. Scan once with a running tank: whenever it dips below zero, the start must be the next station.",
+                description: "There are n gas stations along a circular route. Given two integer arrays gas and cost, return the starting gas station's index if you can travel around the circuit once in the clockwise direction, otherwise return -1."
+            },
+            {
+                title: "Set Matrix Zeroes", difficulty: "Medium", patternId: "matrix-manipulation", url: "https://leetcode.com/problems/set-matrix-zeroes/",
+                clues: "In-place mutation of a grid. The O(1) space trick is to use the first row and first column of the matrix itself as the marker arrays for which rows and columns must be zeroed.",
+                description: "Given an m x n integer matrix, if an element is 0, set its entire row and column to 0's. You must do it in place."
+            },
+            {
+                title: "Spiral Matrix", difficulty: "Medium", patternId: "matrix-manipulation", url: "https://leetcode.com/problems/spiral-matrix/",
+                clues: "No searching involved, just controlled traversal. Keep four boundaries (top, bottom, left, right) and shrink them as you peel off each layer.",
+                description: "Given an m x n matrix, return all elements of the matrix in spiral order."
+            },
+            {
+                title: "Rotate Image", difficulty: "Medium", patternId: "matrix-manipulation", url: "https://leetcode.com/problems/rotate-image/",
+                clues: "In-place matrix mutation with a two-step trick: transpose the matrix (swap across the diagonal), then reverse each row.",
+                description: "You are given an n x n 2D matrix representing an image. Rotate the image by 90 degrees clockwise. You have to modify the input matrix in-place."
+            },
+            {
+                title: "Number of 1 Bits", difficulty: "Easy", patternId: "bit-manipulation", url: "https://leetcode.com/problems/number-of-1-bits/",
+                clues: "A classic bit trick: n & (n - 1) clears the lowest set bit, so counting how many times you can do that before n reaches zero gives the answer.",
+                description: "Write a function that takes the binary representation of a positive integer and returns the number of set bits it has (also known as the Hamming weight)."
+            },
+            {
+                title: "Counting Bits", difficulty: "Easy", patternId: "bit-manipulation", url: "https://leetcode.com/problems/counting-bits/",
+                clues: "Reuse smaller answers: dropping the last bit gives a number already solved, so bits[i] = bits[i >> 1] + (i & 1).",
+                description: "Given an integer n, return an array ans of length n + 1 such that for each i, ans[i] is the number of 1's in the binary representation of i."
+            },
+            {
+                title: "Reverse Bits", difficulty: "Easy", patternId: "bit-manipulation", url: "https://leetcode.com/problems/reverse-bits/",
+                clues: "Walk all 32 bits: shift the result left, OR in the lowest bit of the input, then shift the input right. Pure shifting and masking.",
+                description: "Reverse bits of a given 32 bits unsigned integer."
+            },
+            {
+                title: "Sum of Two Integers", difficulty: "Medium", patternId: "bit-manipulation", url: "https://leetcode.com/problems/sum-of-two-integers/",
+                clues: "Addition without the '+' operator means simulating an adder: XOR gives the sum without carries, AND shifted left gives the carry, and you repeat until the carry is zero.",
+                description: "Given two integers a and b, return the sum of the two integers without using the operators + and -."
             }
 
         ];
