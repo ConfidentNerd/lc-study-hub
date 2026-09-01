@@ -14,7 +14,7 @@ I mostly vibe-coded this with AI to see how far I could take it. It's not meant 
 
 * **Pattern Practice**
   * **Why it's needed:** Memorizing algorithms one by one is inefficient. You're much better off mastering the underlying skeletal templates that most problems are built on.
-  * **What it does:** An interactive environment that presents the use cases for 17 fundamental algorithm patterns. It forces you to write the corresponding Python template from memory using an embedded code editor, then lets you reveal the correct solution to compare your code side-by-side.
+  * **What it does:** An interactive environment that presents the use cases for 23 fundamental algorithm patterns, covering 29 templates in total (since Dynamic Programming is broken out into 7 sub-patterns). It forces you to write the corresponding Python template from memory using an embedded code editor, then lets you reveal the correct solution to compare your code side-by-side.
 
 * **Python Syntax**
   * **Why it's needed:** Most CS students already know how to program. You don't need a full Python tutorial; you just need to quickly recall the specific Python syntax needed for LeetCode under pressure.

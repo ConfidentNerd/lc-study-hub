@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Write the Python template for 23 core algorithm patterns entirely from memory in an embedded editor, then reveal the solution to compare side by side.">
   <title>Python Pattern Practice</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -536,7 +537,11 @@
     }
 
     function saveProgress(progress) {
-      localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress));
+      try {
+        localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress));
+      } catch (e) {
+        console.warn('Could not save practice progress:', e);
+      }
     }
 
     function isProblemDone(name) {
