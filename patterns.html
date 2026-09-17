@@ -8,6 +8,12 @@
   <title>Python Pattern Practice</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // "laptop:" = desktop layout on a short screen, where the editor would otherwise get squeezed
+    tailwind.config = {
+      theme: { extend: { screens: { laptop: { raw: '(min-width: 1024px) and (max-height: 900px)' } } } }
+    };
+  </script>
     <style>
         /* Hide scrollbar on the horizontally scrollable mobile nav */
         .no-scrollbar::-webkit-scrollbar {
@@ -55,7 +61,7 @@
       </div>
     </div>
 
-    <div class="flex-1 flex flex-col lg:h-full lg:overflow-hidden p-4 sm:p-6 max-w-[1600px] mx-auto w-full min-w-0">
+    <div class="flex-1 flex flex-col lg:h-full lg:overflow-hidden laptop:overflow-y-auto p-4 sm:p-6 laptop:p-4 max-w-[1600px] mx-auto w-full min-w-0">
       <button onclick="openSidebar()"
         class="lg:hidden mb-3 self-start inline-flex items-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-md text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 transition-colors">
         <span class="text-base leading-none">&#9776;</span> Patterns
@@ -63,25 +69,28 @@
       <h1 id="question-title" class="text-xl sm:text-2xl font-bold mb-2"></h1>
 
       <pre id="question-text"
-        class="text-gray-700 mb-4 bg-blue-50 p-4 rounded-md border border-blue-100 whitespace-pre-wrap font-sans text-sm"></pre>
+        class="text-gray-700 mb-4 laptop:mb-3 bg-blue-50 p-4 laptop:py-2 rounded-md border border-blue-100 whitespace-pre-wrap font-sans text-sm"></pre>
 
-      <div id="practice-container" class="hidden mb-4 bg-green-50 border border-green-200 p-4 rounded-md shadow-sm">
-        <div id="when-to-use-section" class="mb-3">
-          <h4 class="font-semibold text-green-800 mb-1">When to Use</h4>
-          <ul id="when-to-use-list" class="list-disc pl-5 text-green-700 text-sm space-y-1"></ul>
-        </div>
-        <details id="practice-details" class="rounded-md border border-green-200 bg-white/60">
-          <summary
-            class="cursor-pointer select-none px-3 py-2 font-semibold text-green-800 hover:bg-green-100/60 rounded-md">
-            Recommended Practice Questions
-          </summary>
-          <div class="px-3 pb-3 pt-1">
-            <ul id="practice-list" class="text-green-700 text-sm space-y-1.5 max-h-48 overflow-y-auto pr-1"></ul>
+      <div id="practice-container" class="hidden mb-4 laptop:mb-3 bg-green-50 border border-green-200 p-4 laptop:p-3 rounded-md shadow-sm">
+        <!-- Side by side on short screens so the panel doesn't eat the editor's height -->
+        <div class="laptop:grid laptop:grid-cols-2 laptop:gap-4 laptop:items-start">
+          <div id="when-to-use-section" class="mb-3 laptop:mb-0">
+            <h4 class="font-semibold text-green-800 mb-1">When to Use</h4>
+            <ul id="when-to-use-list" class="list-disc pl-5 text-green-700 text-sm space-y-1"></ul>
           </div>
-        </details>
+          <details id="practice-details" class="rounded-md border border-green-200 bg-white/60">
+            <summary
+              class="cursor-pointer select-none px-3 py-2 font-semibold text-green-800 hover:bg-green-100/60 rounded-md">
+              Recommended Practice Questions
+            </summary>
+            <div class="px-3 pb-3 pt-1">
+              <ul id="practice-list" class="text-green-700 text-sm space-y-1.5 max-h-48 laptop:max-h-28 overflow-y-auto pr-1"></ul>
+            </div>
+          </details>
+        </div>
       </div>
 
-      <div class="flex-1 flex flex-col lg:flex-row gap-4 min-h-0 relative">
+      <div class="flex-1 flex flex-col lg:flex-row gap-4 min-h-0 laptop:min-h-[340px] relative">
 
         <div id="editor-wrapper" class="w-full flex flex-col transition-all duration-300 min-h-[320px] lg:min-h-0">
           <div class="bg-gray-200 px-4 py-1 text-xs font-bold text-gray-600 rounded-t-md uppercase tracking-wider">Your
@@ -98,7 +107,7 @@
 
       </div>
 
-      <div class="mt-4 flex gap-4 shrink-0">
+      <div class="mt-4 laptop:mt-3 flex gap-4 shrink-0">
         <button id="reveal-btn" onclick="toggleSolution()"
           class="w-full sm:w-auto px-6 py-2 bg-indigo-600 text-white font-semibold rounded hover:bg-indigo-700 transition-colors shadow-sm">
           Reveal Solution & Compare
