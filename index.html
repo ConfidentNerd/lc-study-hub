@@ -32,8 +32,8 @@
             <a href="index.html" class="hover:text-indigo-500 transition-colors">LC Study Hub</a>
         </h1>
         <div class="flex gap-3 sm:gap-5 text-xs sm:text-sm font-semibold text-gray-500 items-center overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
-            <a href="patterns.html" class="hover:text-indigo-500 transition-colors whitespace-nowrap shrink-0">Pattern Practice</a>
             <a href="python.html" class="hover:text-indigo-500 transition-colors whitespace-nowrap shrink-0">Python Syntax</a>
+            <a href="patterns.html" class="hover:text-indigo-500 transition-colors whitespace-nowrap shrink-0">Pattern Practice</a>
             <a href="recognition.html" class="hover:text-indigo-500 transition-colors whitespace-nowrap shrink-0">Pattern Recognition</a>
         </div>
     </div>
@@ -62,19 +62,27 @@
                 </div>
             </section>
 
-            <!-- 2. The Tools -->
-            <section class="grid md:grid-cols-3 gap-6">
-                <a href="patterns.html"
-                    class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-gray-100 hover:border-indigo-200 hover:shadow-md hover:-translate-y-1 transition-all group flex flex-col">
-                    <div class="text-4xl mb-4 group-hover:scale-110 transition-transform origin-left">🧩</div>
-                    <h3 class="font-bold text-xl text-gray-800 mb-3 group-hover:text-indigo-600 transition-colors">
-                        Pattern Practice</h3>
-                    <p class="text-gray-600 leading-relaxed flex-1 text-sm">
-                        Stop memorizing algorithms one by one. This tool uses an embedded code editor to force you to
-                        write out the skeletal templates for the 23 core patterns completely from memory.
-                    </p>
-                </a>
+            <!-- 2. Video Walkthrough -->
+            <section class="flex flex-col items-center">
+                <div class="w-full bg-white p-2 sm:p-3 rounded-3xl shadow-sm border border-gray-100">
+                    <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-gray-900">
+                        <iframe
+                            src="https://player.vimeo.com/video/1229981765?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                            frameborder="0"
+                            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin" title="LC Study Hub"
+                            class="absolute inset-0 w-full h-full"></iframe>
+                    </div>
+                </div>
+                <span class="text-xs text-gray-500 mt-3 font-medium">A 5-minute tour of the site and how to use each tool 🎬</span>
+                <span class="inline-flex items-center gap-1.5 text-xs text-gray-500 mt-2">
+                    <span class="border border-gray-400 rounded px-1 text-[10px] font-bold leading-4">CC</span>
+                    Hebrew &amp; English subtitles available
+                </span>
+            </section>
 
+            <!-- 3. The Tools -->
+            <section class="grid md:grid-cols-3 gap-6">
                 <a href="python.html"
                     class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-gray-100 hover:border-indigo-200 hover:shadow-md hover:-translate-y-1 transition-all group flex flex-col">
                     <div class="text-4xl mb-4 group-hover:scale-110 transition-transform origin-left">🐍</div>
@@ -83,6 +91,17 @@
                     <p class="text-gray-600 leading-relaxed flex-1 text-sm">
                         Most CS students already know how to program. You don't need a tutorial; you just need to
                         remember how to initialize a heap. Flashcards strictly for LeetCode-specific Python syntax.
+                    </p>
+                </a>
+
+                <a href="patterns.html"
+                    class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-gray-100 hover:border-indigo-200 hover:shadow-md hover:-translate-y-1 transition-all group flex flex-col">
+                    <div class="text-4xl mb-4 group-hover:scale-110 transition-transform origin-left">🧩</div>
+                    <h3 class="font-bold text-xl text-gray-800 mb-3 group-hover:text-indigo-600 transition-colors">
+                        Pattern Practice</h3>
+                    <p class="text-gray-600 leading-relaxed flex-1 text-sm">
+                        Stop memorizing algorithms one by one. This tool uses an embedded code editor to force you to
+                        write out the skeletal templates for the 23 core patterns completely from memory.
                     </p>
                 </a>
 
@@ -98,7 +117,7 @@
                 </a>
             </section>
 
-            <!-- 3. Active Recall -->
+            <!-- 4. Active Recall -->
             <section class="bg-indigo-50 p-6 sm:p-8 md:p-10 rounded-3xl border border-indigo-100">
                 <h3 class="text-xl sm:text-2xl font-bold text-indigo-900 mb-4">Why does this work? Active Recall.</h3>
                 <p class="text-indigo-800 leading-relaxed mb-4">
@@ -120,7 +139,7 @@
                 </p>
             </section>
 
-            <!-- 4. How I Know This -->
+            <!-- 5. How I Know This -->
             <section
                 class="flex flex-col md:flex-row gap-8 items-center bg-white p-6 sm:p-8 md:p-10 rounded-3xl shadow-sm border border-gray-100">
                 <div class="flex-1 space-y-4">
@@ -140,7 +159,7 @@
                 <div class="w-full md:w-6/12 shrink-0 flex flex-col items-center">
                     <img src="media/lecture-image.jpg" alt="Lecturing at OpCode Club"
                         class="rounded-2xl shadow-sm border border-gray-100 w-full h-auto object-contain bg-white">
-                    <span class="text-xs text-gray-400 mt-3 font-medium">Lecturing at OpCode Club ✨</span>
+                    <span class="text-xs text-gray-500 mt-3 font-medium">Lecturing at OpCode Club ✨</span>
                 </div>
             </section>
 
