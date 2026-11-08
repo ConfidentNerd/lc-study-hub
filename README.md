@@ -6,7 +6,7 @@ A collection of web-based tools designed to apply science-backed learning method
 
 ## Motivation
 
-I built this mini-project to solve my own problem. I realized that reading through LeetCode solutions isn't the best way to *remember* them. Re-reading your notes or writing down answers while staring at open solutions is mostly a waste of time because you aren't forcing your brain to do the work.
+I built this project to solve my own problem. I realized that reading through LeetCode solutions isn't the best way to *remember* them. Re-reading your notes or writing down answers while staring at open solutions is mostly a waste of time because you aren't forcing your brain to do the work.
 
 ## The Tools
 
